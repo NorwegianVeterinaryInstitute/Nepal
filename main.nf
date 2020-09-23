@@ -4,24 +4,34 @@
 nextflow.enable.dsl=2
 
 // Processes
+/*process DATA_COLLECT {
+	
+	// Creating the channels needed for the first analysis step
+Channel 
+    .fromPath( params.reads, checkIfExists: true )
+    .set { fast5_ch } 
+}*/
+
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v4"
-	publishDir "${params.out_dir}/01_guppy/logs", pattern: "fastq/guppy_basecaller_*.log", mode: "copy"
-	publishDir "${params.out_dir}/01_guppy/fastq", pattern: "fastq/*.gz", mode: "copy"
-	publishDir "${params.out_dir}/01_guppy/sequencing_logs", pattern: "fastq/sequencing_*.*", mode: "copy"
+	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
+	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq/*.gz", mode: "copy"
+	publishDir "${params.out_dir}/01_guppy/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
+	label 'gpu'
 
 	input:
-	file("*")
+	file("*") 
+
 
 	output:
 	path "fastq/*.gz", emit: fastq_ch
-	file("fastq/guppy_basecaller_*.log")
-	file("fastq/sequencing_summary.txt")
-	file("fastq/sequencing_telemetry.js")
+	file("logs/guppy_basecaller_*.log")
+	file("sequencing_logs/sequencing_*.*")
 
 	script:
 	"""
+	
 	guppy_basecaller --flowcell FLO-MIN106 --kit SQK-RBK004 \
         -x "cuda:all" \
         --gpu_runners_per_device 16 \
@@ -31,6 +41,14 @@ process GUPPY {
     -i fast5 \
     -s fastq
 
+	# moving log files
+	mkdir logs
+	mv fastq/guppy_basecaller_*.log logs/
+
+	# moving sequencing telemetry and summary files
+	mkdir sequencing_logs
+	mv fastq/sequencing_*.* sequencing_logs/
+
 	"""
 }
 
@@ -39,10 +57,10 @@ process GUPPY {
 // workflows
 
 workflow QUALITY_FLOW {
-	reads_ch=channel.fromPath(params.reads, checkIfExists: true)
+	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
                         .collect()
 
-	GUPPY(reads_ch)
+	GUPPY(fast5_ch)
 }
 
 
