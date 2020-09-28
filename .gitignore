@@ -1,0 +1,7 @@
+#Ignoring the nextflow output files and folders
+.nextflow.log
+.nextflow.log.*
+.nextflow
+
+#ignoring a test directory
+*_test
