@@ -3,14 +3,6 @@
 // Activate dsl2
 nextflow.enable.dsl=2
 
-// Processes
-/*process DATA_COLLECT {
-	
-	// Creating the channels needed for the first analysis step
-Channel 
-    .fromPath( params.reads, checkIfExists: true )
-    .set { fast5_ch } 
-}*/
 
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v4"
@@ -27,7 +19,7 @@ process GUPPY {
 	output:
 	path "fastq/*.gz", emit: fastq_ch
 	file("logs/guppy_basecaller_*.log")
-	file("sequencing_logs/sequencing_*.*")
+	path "sequencing_logs/sequencing_*.*", emit: summary_ch
 
 	script:
 	"""
@@ -52,6 +44,32 @@ process GUPPY {
 	"""
 }
 
+process NANOPLOT {
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+
+	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
+
+	input:
+	file("*.txt") 
+
+
+	output:
+	path "*.summary-plots-log-transformed"
+
+
+	// WHAT IS THE PARAMETER TO USE THE OUTPUT DIRECTORY AS A VARIABLE???
+	script:
+	"""
+	ls -la
+	 
+	NanoPlot -t 4 --summary sequencing_summary.txt --maxlength 3000 --plots hex dot --title ${params.outdir}.test -o ${params.outdir}.summary-plots-log-transformed
+
+
+	"""
+
+
+}
+
 
 
 // workflows
@@ -61,6 +79,7 @@ workflow QUALITY_FLOW {
                         .collect()
 
 	GUPPY(fast5_ch)
+	NANOPLOT(GUPPY.out.summary_ch)
 }
 
 
