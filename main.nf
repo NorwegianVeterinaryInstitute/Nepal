@@ -3,7 +3,7 @@
 // Activate dsl2
 nextflow.enable.dsl=2
 
-
+// describe the processes that are part of the pipeline
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v4"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
@@ -19,7 +19,7 @@ process GUPPY {
 	output:
 	path "fastq/*.gz", emit: fastq_ch
 	file("logs/guppy_basecaller_*.log")
-	path "sequencing_logs/sequencing_*.*", emit: summary_ch
+	path "sequencing_logs/sequencing_summary.txt", emit: summary_ch
 
 	script:
 	"""
@@ -49,26 +49,52 @@ process NANOPLOT {
 
 	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
 
+	label 'shorttime'
+
 	input:
-	file("*.txt") 
+	file(summary) 
 
 
 	output:
 	path "*.summary-plots-log-transformed"
 
-
-	// WHAT IS THE PARAMETER TO USE THE OUTPUT DIRECTORY AS A VARIABLE???
 	script:
 	"""
-	ls -la
 	 
-	NanoPlot -t 4 --summary sequencing_summary.txt --maxlength 3000 --plots hex dot --title ${params.outdir}.test -o ${params.outdir}.summary-plots-log-transformed
+	NanoPlot -t 4 --summary $summary --maxlength 3000 --plots hex dot --title Sequencing_Summary -o Sequencing.summary-plots-log-transformed
 
 
 	"""
 
 
 }
+
+process QCAT {
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/qcat"
+
+	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
+
+	label 'shorttime'
+
+	input:
+	file(x) 
+
+
+	output:
+	path "*.summary-plots-log-transformed"
+
+	script:
+	"""
+	ls -la
+	 
+	qcat
+
+
+	"""
+
+
+
+
 
 
 
@@ -79,54 +105,12 @@ workflow QUALITY_FLOW {
                         .collect()
 
 	GUPPY(fast5_ch)
-	NANOPLOT(GUPPY.out.summary_ch)
+	NANOPLOT(GUPPY.out.summary_ch.collect())
+	QCAT(GUPPY.out.fastq_ch.collect())
 }
 
 
-/*
-workflow PARSNP_PHYLO {
-	assemblies_ch=channel.fromPath(params.assemblies, checkIfExists: true)
-			     .collect()
-
-	PARSNP(assemblies_ch)
-	CONVERT(PARSNP.out.xmfa_ch)
-	if (params.deduplicate) {
-		DEDUPLICATE(CONVERT.out.fasta_alignment_ch)
-		GUBBINS(DEDUPLICATE.out.seqkit_ch)
-		MASKRC(GUBBINS.out.gubbins_ch,
-		       DEDUPLICATE.out.seqkit_ch)
-	}
-	if (!params.deduplicate) {
-		GUBBINS(CONVERT.out.fasta_alignment_ch)
-		MASKRC(GUBBINS.out.gubbins_ch,
-		       CONVERT.out.fasta_alignment_ch)
-	}
-	SNPDIST(MASKRC.out.masked_ch)
-	IQTREE(MASKRC.out.masked_ch)
-}
-
-
-workflow SNIPPY_PHYLO {
-	reads_ch=channel.fromPath(params.reads, checkIfExists: true)
-                        .collect()
-
-        SNIPPY(reads_ch)
-	if (params.deduplicate) {
-                DEDUPLICATE(SNIPPY.out.snippy_alignment_ch)
-                GUBBINS(DEDUPLICATE.out.seqkit_ch)
-		MASKRC(GUBBINS.out.gubbins_ch,
-		       DEDUPLICATE.out.seqkit_ch)
-        }
-        if (!params.deduplicate) {
-                GUBBINS(SNIPPY.out.snippy_alignment_ch)
-		MASKRC(GUBBINS.out.gubbins_ch,
-		       SNIPPY.out.snippy_alignment_ch)
-        }
-        SNPDIST(MASKRC.out.masked_ch)
-        IQTREE(MASKRC.out.masked_ch)
-}
-*/
-
+// selecting the correct workflow based on user choice defined in main.config.
 
 workflow {
 if (params.type == "basic") {
