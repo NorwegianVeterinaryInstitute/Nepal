@@ -69,12 +69,11 @@ process NANOPLOT {
 
 }
 
+/*
 process QCAT {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/qcat"
 
-	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
-
-	label 'shorttime'
+	publishDir "${params.out_dir}/03_qcat/", pattern: "*", mode: "copy"
 
 	input:
 	file(x) 
@@ -89,9 +88,37 @@ process QCAT {
 	 
 	qcat
 
+	##moving data to $SCRATCH
+cd $SCRATCH
+
+rsync -r $FASTQ_DIR/*.fastq.gz $SCRATCH/
+
+gunzip -v *.gz
+
+cat *.fastq > all.sequences.fastq
+
+#create output dir ID for demultiplexed reads
+MYDATA=(16SrRNA_reads)
+
+
+echo processing all.sequences.fastq
+
+##running qcat with default parameters
+qcat -t 10 -f all.sequences.fastq -b $MYDATA.demultiplexed \
+    --kit NBD103/NBD104 --detect-middle --trim --min-read-length 50  --tsv
+
+# checking output
+ls -la
+
+#moving data back to project area
+
+rsync -rauWP $MYDATA.demultiplexed $OUTPUT_DIR
+rsync -rauWP *.tsv $OUTPUT_DIR
+
+
 
 	"""
-
+*/
 
 
 
@@ -106,7 +133,7 @@ workflow QUALITY_FLOW {
 
 	GUPPY(fast5_ch)
 	NANOPLOT(GUPPY.out.summary_ch.collect())
-	QCAT(GUPPY.out.fastq_ch.collect())
+	//QCAT(GUPPY.out.fastq_ch.collect())
 }
 
 
