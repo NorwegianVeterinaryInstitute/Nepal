@@ -86,6 +86,7 @@ process QCAT {
 	output:
 	path "amplicons.demultiplexed/", emit: fastq_ch
 	file("*.log")
+	file("*.txt")
 
 	script:
 	"""
@@ -103,9 +104,12 @@ process QCAT {
 		--detect-middle \
 		--trim \
 		--min-read-length 50  \
-		--tsv > qcat_demultiplexing.log 2>barcode_counts.log
+		--tsv > qcat_demultiplexing.log 2>stdout.log
 
 	gzip -r amplicons.demultiplexed
+	
+	# extracting the barcode counts from stdout and put them in a parsable format
+	grep -iF "barcode" stdout.log | sed -e 's/      barcode/barcode/g' | sed -e '1 ! s/  */_/g' | sed -e '1 ! s/:_|_|_/\t/g' |sed -e 's/_/\t/g' |sed -e 's/\t%//g' > barcode_counts.txt
 
 	"""
 // need to add a way to extract for each barcode the names of the reads and then put that in a list	
