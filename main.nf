@@ -49,7 +49,7 @@ process NANOPLOT {
 
 	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
 
-	label 'shorttime'
+	label 'tiny'
 
 	input:
 	file(summary) 
@@ -71,21 +71,21 @@ process NANOPLOT {
 
 process QCAT {
 	// this process is to remove reads that are too short and it does demutliplexing using identified barcodes
+	// the current version of qcat only uses the epi2me demultiplexing algorithm and that uses only one thread.
+	// When it get's updated we might use more threads.
 	
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/qcat"
 
 	publishDir "${params.out_dir}/03_qcat/", pattern: "*", mode: "copy"
 
-	//label 'medium'
-
-
+	 
 	input:
 	file(x) 
 
 
 	output:
 	path "amplicons.demultiplexed/", emit: fastq_ch
-	file("qcat_demultiplexing.log")
+	file("*.log")
 
 	script:
 	"""
@@ -96,7 +96,7 @@ process QCAT {
 	echo processing all.sequences.fastq
 
 	##running qcat with default parameters
-	qcat -t 10 -f all.sequences.fastq \
+	qcat -t 1 -f all.sequences.fastq \
 		-b amplicons.demultiplexed \
 		--guppy \
 		--kit ${params.barcode} \
