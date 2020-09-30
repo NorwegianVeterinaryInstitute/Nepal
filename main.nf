@@ -73,6 +73,7 @@ process QCAT {
 	// this process is to remove reads that are too short and it does demutliplexing using identified barcodes
 	// the current version of qcat only uses the epi2me demultiplexing algorithm and that uses only one thread.
 	// When it get's updated we might use more threads.
+	// qcat is one 
 	
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/qcat"
 
