@@ -49,7 +49,7 @@ process NANOPLOT {
 
 	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
 
-	label 'shorttime'
+	label 'tiny'
 
 	input:
 	file(summary) 
@@ -66,61 +66,51 @@ process NANOPLOT {
 
 	"""
 
-
 }
 
-/*
+
 process QCAT {
+	// this process is to remove reads that are too short and it does demutliplexing using identified barcodes
+	// the current version of qcat only uses the epi2me demultiplexing algorithm and that uses only one thread.
+	// When it get's updated we might use more threads.
+	
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/qcat"
 
 	publishDir "${params.out_dir}/03_qcat/", pattern: "*", mode: "copy"
 
+	 
 	input:
 	file(x) 
 
 
 	output:
-	path "*.summary-plots-log-transformed"
+	path "amplicons.demultiplexed/", emit: fastq_ch
+	file("*.log")
 
 	script:
 	"""
 	ls -la
 	 
-	qcat
+	zcat *.fastq.gz > all.sequences.fastq
+	
+	echo processing all.sequences.fastq
 
-	##moving data to $SCRATCH
-cd $SCRATCH
+	##running qcat with default parameters
+	qcat -t 1 -f all.sequences.fastq \
+		-b amplicons.demultiplexed \
+		--guppy \
+		--kit ${params.barcode} \
+		--detect-middle \
+		--trim \
+		--min-read-length 50  \
+		--tsv > qcat_demultiplexing.log 2>barcode_counts.log
 
-rsync -r $FASTQ_DIR/*.fastq.gz $SCRATCH/
-
-gunzip -v *.gz
-
-cat *.fastq > all.sequences.fastq
-
-#create output dir ID for demultiplexed reads
-MYDATA=(16SrRNA_reads)
-
-
-echo processing all.sequences.fastq
-
-##running qcat with default parameters
-qcat -t 10 -f all.sequences.fastq -b $MYDATA.demultiplexed \
-    --kit NBD103/NBD104 --detect-middle --trim --min-read-length 50  --tsv
-
-# checking output
-ls -la
-
-#moving data back to project area
-
-rsync -rauWP $MYDATA.demultiplexed $OUTPUT_DIR
-rsync -rauWP *.tsv $OUTPUT_DIR
-
-
+	gzip -r amplicons.demultiplexed
 
 	"""
-*/
+// need to add a way to extract for each barcode the names of the reads and then put that in a list	
 
-
+}
 
 
 
@@ -133,7 +123,7 @@ workflow QUALITY_FLOW {
 
 	GUPPY(fast5_ch)
 	NANOPLOT(GUPPY.out.summary_ch.collect())
-	//QCAT(GUPPY.out.fastq_ch.collect())
+	QCAT(GUPPY.out.fastq_ch.collect())
 }
 
 
