@@ -3,6 +3,29 @@
 // Activate dsl2
 nextflow.enable.dsl=2
 
+
+// Showing the basic parameters at the start of the pipeline.
+// useful for catching mmissing parameters.
+
+log.info """\
+         NEPAL - Nextflow F   P I P E L I N E    
+         ===================================
+         
+         Workflow type running          : ${params.type}
+        --------------------------------- ---------------------------------
+         Input - reads                  : ${params.reads}
+         Output - directory             : ${params.out_dir}
+         Temporary - directory          : ${workDir}
+        --------------------------------- ---------------------------------		 
+         Nanopore flowcell              : ${params.flowcell} 
+         Nanopore sequencing kit        : ${params.seqkit}
+         Nanopore barcode kit           : ${params.barcode} 
+        --------------------------------- ---------------------------------
+
+		 """
+         .stripIndent()
+
+
 // describe the processes that are part of the pipeline
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v4"
@@ -24,7 +47,7 @@ process GUPPY {
 	script:
 	"""
 	
-	guppy_basecaller --flowcell FLO-MIN106 --kit SQK-RBK004 \
+	guppy_basecaller --flowcell ${params.flowcell} --kit ${params.seqkit} \
         -x "cuda:all" \
         --gpu_runners_per_device 16 \
         --num_callers 16 \
@@ -44,10 +67,42 @@ process GUPPY {
 	"""
 }
 
-process NANOPLOT {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/02_nanoplot/", pattern: "*", mode: "copy"
+// Nanoplot settings for the raw data when using the basic pipeline
+// This will show all the reads that are coming from Guppy. 
+process NANOPLOT_BASIC {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+	
+	publishDir "${params.out_dir}/02_nanoplot_basic/", pattern: "*", mode: "copy"
+
+	label 'tiny'
+
+	input:
+	file(summary) 
+
+
+	output:
+	path "*.summary-plots-log-transformed"
+
+	script:
+	"""
+	 
+	NanoPlot -t 4 --summary $summary --plots hex dot --title Sequencing_Summary -o Sequencing.summary-plots-log-transformed
+
+
+	"""
+
+}
+
+//Nanoplot settings for the raw data when using the amplicon pipeline
+// This will show reads with a max length of 3000 bp, longer sequences are likely not correct for amplicon sequencing.
+
+process NANOPLOT_AMPLICON {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+	
+	publishDir "${params.out_dir}/02_nanoplot_amplicon/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -85,7 +140,7 @@ process QCAT {
 
 
 	output:
-	path "amplicons.demultiplexed/", emit: fastq_ch
+	path "amplicons.demultiplexed/*", emit: demultiplexed_ch
 	file("*.log")
 	file("*.txt")
 
@@ -113,11 +168,63 @@ process QCAT {
 	grep -iF "barcode" stdout.log | sed -e 's/      barcode/barcode/g' | sed -e '1 ! s/  */_/g' | sed -e '1 ! s/:_|_|_/\t/g' |sed -e 's/_/\t/g' |sed -e 's/\t%//g' > barcode_counts.txt
 
 	"""
-// need to add a way to extract for each barcode the names of the reads and then put that in a list	
+	// need to add a way to extract for each barcode the names of the reads and then put that in a list	
 
 }
 
+process NANOFILT_BASIC {
+	/* this process is to split the output of qcat in as many processes as we have barcodes. 
+	* it then uses Nanofilt to process each barcoded sample seperatly
+	* in the workflow this is indicated with the flatten operator.
+	*/
+	
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt"
 
+	publishDir "${params.out_dir}/04_nanofilt_basic/", pattern: "*", mode: "copy"
+
+	label 'tiny'
+
+	input:
+	file(x) 
+
+	output:
+	tuple val(samplename), path('*.trimmed.fastq.gz'), emit: trimmed_ch
+
+	script:
+	samplename = x.toString() - ~/.fastq.gz$/
+	"""
+	ls -la
+	gunzip -c $x | NanoFilt -q 10 -l 100 --headcrop 50 | gzip > ${samplename}.trimmed.fastq.gz
+	
+	"""
+}
+
+process NANOFILT_AMPLICON {
+	/* this process is to split the output of qcat in as many processes as we have barcodes. 
+	* it then uses Nanofilt to process each barcoded sample seperatly
+	* in the workflow this is indicated with the flatten operator.
+	*/
+	
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt"
+
+	publishDir "${params.out_dir}/04_nanofilt_amplicon/", pattern: "*", mode: "copy"
+
+	label 'tiny'
+
+	input:
+	file(x) 
+
+	output:
+	tuple val(samplename), path('*.trimmed.fastq.gz'), emit: trimmed_ch
+
+	script:
+	samplename = x.toString() - ~/.fastq.gz$/
+	"""
+	ls -la
+	gunzip -c $x | NanoFilt -q 10 -l 100 --headcrop 50 | gzip > ${samplename}.trimmed.fastq.gz
+	
+	"""
+}
 
 
 // workflows
@@ -127,8 +234,29 @@ workflow QUALITY_FLOW {
                         .collect()
 
 	GUPPY(fast5_ch)
-	NANOPLOT(GUPPY.out.summary_ch.collect())
+	NANOPLOT_BASIC(GUPPY.out.summary_ch.collect())
 	QCAT(GUPPY.out.fastq_ch.collect())
+	NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())   
+}
+
+workflow AMPLICON_RUN {
+	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
+                        .collect()
+
+	GUPPY(fast5_ch)
+	NANOPLOT_AMPLICON(GUPPY.out.summary_ch.collect())
+	QCAT(GUPPY.out.fastq_ch.collect())
+	NANOFILT_AMPLICON(QCAT.out.demultiplexed_ch.flatten())   
+}
+
+workflow ASSEMBLY_RUN {
+	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
+                        .collect()
+
+	GUPPY(fast5_ch)
+	NANOPLOT_AMPLICON(GUPPY.out.summary_ch.collect())
+	QCAT(GUPPY.out.fastq_ch.collect())
+	NANOFILT_AMPLICON(QCAT.out.demultiplexed_ch.flatten())   
 }
 
 
@@ -140,10 +268,10 @@ if (params.type == "basic") {
 	}
 
 if (params.type == "amplicon") {
-	PARSNP_PHYLO()
+	AMPLICON_RUN()
 	}
 
 if (params.type == "assembly") {
-	CORE_PHYLO()
+	ASSEMBLY_RUN()
 	}
 }
