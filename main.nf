@@ -99,7 +99,6 @@ process NANOPLOT_BASIC {
 // This will show reads with a max length of 3000 bp, longer sequences are likely not correct for amplicon sequencing.
 
 process NANOPLOT_AMPLICON {
-	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 	
 	publishDir "${params.out_dir}/02_nanoplot_amplicon/", pattern: "*", mode: "copy"
