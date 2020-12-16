@@ -19,6 +19,9 @@ ___
 2. Modify the file main.config
     * specify what kind of run you want to do: `basic`, `amplicon` or `assembly`. ( For now only `basic` works).
     * Specify the PATH where the fast5 files are located.
+    * Specify the flowcell you used
+    * Specify the sequencing kit you used
+    * Specify the barcode kit you used
 
 3. Now you can run the pipeline using the following command:
     ```
