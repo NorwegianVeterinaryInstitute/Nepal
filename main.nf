@@ -1,4 +1,4 @@
-// PhyloFlow Pipeline
+// Nepal Pipeline
 
 // Activate dsl2
 nextflow.enable.dsl=2
