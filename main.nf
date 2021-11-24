@@ -28,7 +28,7 @@ log.info """\
 
 // Process Guppy is used for basecalling the fast5 raw data files.
 process GUPPY {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v4"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v5"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq/*.gz", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
@@ -40,7 +40,8 @@ process GUPPY {
 
 
 	output:
-	path "fastq/*.gz", emit: fastq_ch
+	path "fastq/pass/*.gz", emit: fastq_ch
+  path "fastq"
 	file("logs/guppy_basecaller_*.log")
 	path "sequencing_logs/sequencing_summary.txt", emit: summary_ch
 
@@ -53,6 +54,8 @@ process GUPPY {
         --num_callers 16 \
     --records_per_fastq 0 \
     --compress_fastq \
+    --disable_pings \
+    --disable_qscore_filtering \
     -i fast5 \
     -s fastq
 
