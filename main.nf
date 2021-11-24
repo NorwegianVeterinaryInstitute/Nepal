@@ -55,7 +55,6 @@ process GUPPY {
         --records_per_fastq 0 \
         --compress_fastq \
         --disable_pings \
-        --min_qscore 7 \
         -i fast5 \
         -s fastq
 
