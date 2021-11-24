@@ -52,12 +52,12 @@ process GUPPY {
         -x "cuda:all" \
         --gpu_runners_per_device 16 \
         --num_callers 16 \
-    --records_per_fastq 0 \
-    --compress_fastq \
-    --disable_pings \
-    --disable_qscore_filtering \
-    -i fast5 \
-    -s fastq
+        --records_per_fastq 0 \
+        --compress_fastq \
+        --disable_pings \
+        --min_qscore 7 \
+        -i fast5 \
+        -s fastq
 
 	# moving log files
 	mkdir logs
