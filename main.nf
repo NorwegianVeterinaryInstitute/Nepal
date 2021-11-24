@@ -220,7 +220,7 @@ process NANOFILT_BASIC {
 	samplename = x.toString() - ~/.fastq.gz$/
 	"""
 	ls -la
-	gunzip -c $x | NanoFilt -q 10 -l 100 --headcrop 50 | gzip > ${samplename}.trimmed.fastq.gz
+	gunzip -c $x | NanoFilt -q 7 -l 100 --headcrop 50 | gzip > ${samplename}.trimmed.fastq.gz
 
 	"""
 }
@@ -229,6 +229,9 @@ process NANOFILT_AMPLICON {
 	/* this process is to split the output of qcat in as many processes as we have barcodes.
 	* it then uses Nanofilt to process each barcoded sample seperatly
 	* in the workflow this is indicated with the flatten operator.
+  * the minimum read length allowed is 1300 bp
+  * the maxumum read length allowed is 1700 bp
+  * minimum average quality score is eigth.
 	*/
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt"
@@ -247,7 +250,7 @@ process NANOFILT_AMPLICON {
 	samplename = x.toString() - ~/.fastq.gz$/
 	"""
 	ls -la
-	gunzip -c $x | NanoFilt -q 10 -l 100 | gzip > ${samplename}.trimmed.fastq.gz
+	gunzip -c $x | NanoFilt -q 7 -l 1300 --maxlength 1700 | gzip > ${samplename}.trimmed.fastq.gz
 
 	"""
 }
