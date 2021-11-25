@@ -19,6 +19,7 @@ log.info """\
         --------------------------------- ---------------------------------
          Nanopore flowcell              : ${params.flowcell}
          Nanopore sequencing kit        : ${params.seqkit}
+         Nanopore barcode kit guppy     : ${params.guppy.barcode}
          Nanopore barcode kit           : ${params.barcode}
         --------------------------------- ---------------------------------
 
@@ -50,11 +51,14 @@ process GUPPY {
 
 	guppy_basecaller --flowcell ${params.flowcell} --kit ${params.seqkit} \
         -x "cuda:all" \
-        --gpu_runners_per_device 16 \
-        --num_callers 16 \
+        --gpu_runners_per_device 24 \
+        --num_callers 24 \
         --records_per_fastq 0 \
         --compress_fastq \
         --disable_pings \
+        --barcode_kits ${params.guppy.barcode} \
+        --trim_barcodes \
+        --min_qscore 7 \
         -i fast5 \
         -s fastq
 
