@@ -30,7 +30,7 @@ log.info """\
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v5"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
-	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq/*.gz", mode: "copy"
+	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
 	label 'gpu'
