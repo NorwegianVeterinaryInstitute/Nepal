@@ -19,6 +19,7 @@ log.info """\
         --------------------------------- ---------------------------------
          Nanopore flowcell              : ${params.flowcell}
          Nanopore sequencing kit        : ${params.seqkit}
+         Nanopore barcode kit guppy     : ${params.guppy.barcode}
          Nanopore barcode kit           : ${params.barcode}
         --------------------------------- ---------------------------------
 
@@ -30,7 +31,7 @@ log.info """\
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v5"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
-	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq/*.gz", mode: "copy"
+	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
 	label 'gpu'
@@ -50,11 +51,14 @@ process GUPPY {
 
 	guppy_basecaller --flowcell ${params.flowcell} --kit ${params.seqkit} \
         -x "cuda:all" \
-        --gpu_runners_per_device 16 \
-        --num_callers 16 \
+        --gpu_runners_per_device 24 \
+        --num_callers 24 \
         --records_per_fastq 0 \
         --compress_fastq \
         --disable_pings \
+        --barcode_kits ${params.guppy.barcode} \
+        --trim_barcodes \
+        --min_qscore 7 \
         -i fast5 \
         -s fastq
 
