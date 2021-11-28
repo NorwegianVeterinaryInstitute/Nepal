@@ -56,8 +56,6 @@ process GUPPY {
         --records_per_fastq 0 \
         --compress_fastq \
         --disable_pings \
-        --barcode_kits ${params.guppy.barcode} \
-        --trim_barcodes \
         --min_qscore 7 \
         -i fast5 \
         -s fastq
@@ -261,6 +259,30 @@ process NANOFILT_AMPLICON {
 	"""
 }
 
+process FLY_BASIC {
+	/* this process takes the output of NanoFilt and runs the Flye assembler.
+	* The demultiplexed genomes are assembled with default Flye settings.
+	* in the workflow this is indicated with the flatten operator.
+	*/
+
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/flye"
+
+	publishDir "${params.out_dir}/05_fly_asm/", pattern: "*", mode: "copy"
+
+	label 'medium'
+
+	input:
+	tuple val(samplename), file(x)
+
+	output:
+  tuple val(samplename), path {"*"}, emit: new_assemblies
+
+	script:
+	"""
+	ls -la
+  flye --nano-raw *.trimmed.fastq.gz --out-dir ${samplename} --threads 8
+	"""
+}
 
 // workflows
 
@@ -272,6 +294,7 @@ workflow QUALITY_FLOW {
 	NANOPLOT_BASIC(GUPPY.out.summary_ch.collect())
 	QCAT(GUPPY.out.fastq_ch.collect())
 	NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())
+  FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
 }
 
 workflow AMPLICON_RUN {
