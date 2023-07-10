@@ -1,5 +1,5 @@
 # Nepal
-NExtflow Pipeline for 16S AmpLicons
+NExtflow Pipeline for Nanopore data analysis
 
 ## Disclaimer
 This pipeline is currently in development. Contact Thomas Haverkamp for more information.
