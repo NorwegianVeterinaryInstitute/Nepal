@@ -29,7 +29,7 @@ log.info """\
 
 // Process Guppy is used for basecalling the fast5 raw data files.
 process GUPPY {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v5"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
@@ -41,7 +41,7 @@ process GUPPY {
 
 
 	output:
-	path "fastq/pass/*.gz", emit: fastq_ch
+	path "fastq/simplex/*.gz", emit: fastq_ch
   path "fastq"
 	file("logs/guppy_basecaller_*.log")
 	path "sequencing_logs/sequencing_summary.txt", emit: summary_ch
@@ -49,8 +49,8 @@ process GUPPY {
 	script:
 	"""
 
-	guppy_basecaller --flowcell ${params.flowcell} --kit ${params.seqkit} \
-        -x "cuda:all" \
+  guppy_basecaller -x "cuda:all" \
+        -c /cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7/data/dna_r10.4.1_e8.2_260bps_sup.cfg \
         --gpu_runners_per_device 24 \
         --num_callers 24 \
         --records_per_fastq 0 \
@@ -59,6 +59,8 @@ process GUPPY {
         --min_qscore 7 \
         -i fast5 \
         -s fastq
+
+  duplex_tools split_on_adapter --threads 8 fastq/pass fastq/simplex PCR
 
 	# moving log files
 	mkdir logs
@@ -208,7 +210,7 @@ process NANOFILT_BASIC {
 	* in the workflow this is indicated with the flatten operator.
 	*/
 
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt_2.8.0"
 
 	publishDir "${params.out_dir}/04_nanofilt_basic/", pattern: "*", mode: "copy"
 
@@ -224,7 +226,7 @@ process NANOFILT_BASIC {
 	samplename = x.toString() - ~/.fastq.gz$/
 	"""
 	ls -la
-	gunzip -c $x | NanoFilt -q 7 -l 100 --headcrop 50 | gzip > ${samplename}.trimmed.fastq.gz
+	gunzip -c $x | NanoFilt -q 7 -l 100 | gzip > ${samplename}.trimmed.fastq.gz
 
 	"""
 }
@@ -238,7 +240,7 @@ process NANOFILT_AMPLICON {
   * minimum average quality score is eigth.
 	*/
 
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt_2.8.0"
 
 	publishDir "${params.out_dir}/04_nanofilt_amplicon/", pattern: "*", mode: "copy"
 
@@ -264,6 +266,8 @@ process FLY_BASIC {
 	* The demultiplexed genomes are assembled with default Flye settings.
 	* in the workflow this is indicated with the flatten operator.
 	*/
+	errorStrategy 'ignore'
+
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/flye"
 
