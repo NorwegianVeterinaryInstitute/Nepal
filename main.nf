@@ -31,7 +31,7 @@ log.info """\
 process GUPPY {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
-	publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
+	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
 	label 'gpu'
@@ -41,8 +41,8 @@ process GUPPY {
 
 
 	output:
-	path "fastq/simplex/*.gz", emit: fastq_ch
-  path "fastq"
+	path "fastq/pass/barcode*", emit: fastq_ch
+	path "fastq"
 	file("logs/guppy_basecaller_*.log")
 	path "sequencing_logs/sequencing_summary.txt", emit: summary_ch
 
@@ -50,17 +50,21 @@ process GUPPY {
 	"""
 
   guppy_basecaller -x "cuda:all" \
-        -c /cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7/data/dna_r10.4.1_e8.2_260bps_sup.cfg \
-        --gpu_runners_per_device 24 \
+        -c /cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7/data/dna_r10.4.1_e8.2_400bps_sup.cfg \
+        --barcode_kits SQK-RBK114-24 \
+		--detect_barcodes \
+		--detect_mid_strand_barcodes \
+		--enable_trim_barcodes \
+		--num_barcoding_threads 12 \
+		--num_barcoding_buffers 12 \
+		--gpu_runners_per_device 24 \
         --num_callers 24 \
         --records_per_fastq 0 \
         --compress_fastq \
         --disable_pings \
         --min_qscore 7 \
-        -i fast5 \
+        -i pod5 \
         -s fastq
-
-  duplex_tools split_on_adapter --threads 8 fastq/pass fastq/simplex PCR
 
 	# moving log files
 	mkdir logs
@@ -128,6 +132,35 @@ process NANOPLOT_AMPLICON {
 
 }
 
+process DUPLEX_SPLIT {
+	// process to split the demultiplexed reads into simplex reads
+	// this will split reads if they contain an internal barcode
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7"
+
+	publishDir "${params.out_dir}/09_simplex_reads/", pattern: "*", mode: "copy"
+
+	//label 'medium'  // duplex tools needs only cpus
+
+	input:
+	file(x)
+
+	output:
+	path "simplex.*", emit: demultiplexed_ch
+
+
+	script:
+	"""
+	echo folder to process $x
+
+	duplex_tools split_on_adapter --threads 8 $x simplex.$x Native
+
+	"""
+
+
+
+}
+
+
 //Nanoplot settings for the raw data when using the amplicon pipeline
 // This will show reads with a max length of 3000 bp, longer sequences are likely not correct for amplicon sequencing.
 
@@ -148,7 +181,7 @@ process NANOPLOT_CLEAN {
 	script:
 	"""
 
-	NanoPlot -t 4 --fastq_minimal barcode*.gz  --maxlength 3000 --plots hex dot --title Clean_data_Summary -o Clean_data.summary-plots-log-transformed
+	NanoPlot -t 4 --fastq_minimal barcode*.gz --plots hex dot --title Clean_data_Summary -o Clean_data.summary-plots-log-transformed
 
 
 	"""
@@ -226,7 +259,7 @@ process NANOFILT_BASIC {
 	samplename = x.toString() - ~/.fastq.gz$/
 	"""
 	ls -la
-	gunzip -c $x | NanoFilt -q 7 -l 100 | gzip > ${samplename}.trimmed.fastq.gz
+	gunzip -c $x/*.gz | NanoFilt -q 7 -l 300 | gzip > ${samplename}.trimmed.fastq.gz
 
 	"""
 }
@@ -290,6 +323,17 @@ process FLY_BASIC {
 
 // workflows
 
+workflow QUALITY_SPLIT {
+	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
+                        .collect()
+
+	GUPPY(fast5_ch)
+	NANOPLOT_BASIC(GUPPY.out.summary_ch.collect())
+	DUPLEX_SPLIT(GUPPY.out.fastq_ch.flatten())
+	NANOFILT_BASIC(DUPLEX_SPLIT.out.demultiplexed_ch.flatten())
+  FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
+}
+
 workflow QUALITY_FLOW {
 	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
                         .collect()
@@ -335,5 +379,9 @@ if (params.type == "amplicon") {
 
 if (params.type == "assembly") {
 	ASSEMBLY_RUN()
+	}
+
+if (params.type == "split") {
+	QUALITY_SPLIT()
 	}
 }
