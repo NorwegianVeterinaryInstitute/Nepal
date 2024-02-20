@@ -1,5 +1,5 @@
 # Nepal
-NExtflow Pipeline for Nanopore data analysis
+NExtflow Pipeline for Nanopore data anALysis
 
 ## Disclaimer
 This pipeline is currently in development. Contact Thomas Haverkamp for more information.
@@ -7,6 +7,21 @@ This pipeline is currently in development. Contact Thomas Haverkamp for more inf
 ## License
 This software is published under the BSD 3-clause license. See the LICENSE file in the repository.
 ___ 
+
+# What is Nepal?
+Nepal is a pipeline for processing raw nanopore data and can be used for sequence data for bacterial genomes, 16s rRNA or just generate a clean demultiplexed dataset that can be used in other projects. The pipeline is set-up for usage on a HPC cluster that uses slurm for task management. It requires the use of servers with GPUs (Nivdia A100) for the basecalling step. It can be run locally, if one or more GPUs are available. This pipeline takes as input a folder with pod5 files (https://pod5-file-format.readthedocs.io/en/latest/index.html) and a samplesheet.
+
+The current tools that are included in the pipeline are:
+* Basecalling: Dorado version xxx
+* Vizualize read quality: Nanoplot XXX
+* Quality control and filtering: Nanofilt
+* Bacterial Genome assembly: Flye
+
+# Setting up your analysis
+1. Download this repository to your project folder with the command:
+    `https://github.com/NorwegianVeterinaryInstitute/Nepal.git`.
+2. In the directory Nepal that is now created, you find a file called: `sample_sheet.csv`. You can modify this file in the 
+
 
 # How to run this pipeline
 
