@@ -23,7 +23,7 @@ process GUPPY_BASIC {
 	"""
 
   guppy_basecaller -x "cuda:all" \
-        -c /cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7/data/dna_r10.4.1_e8.2_400bps_sup.cfg \
+        -c /cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7/data/$params.guppy.model \
         --barcode_kits $params.guppy.barcode \
 		--detect_barcodes \
 		--detect_mid_strand_barcodes \
