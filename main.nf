@@ -33,7 +33,7 @@ log.info """\
 
 // workflows
 
-workflow QUALITY_SPLIT {
+workflow BACTERIAL_ASM {
 	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
                         .collect()
 
@@ -44,7 +44,7 @@ workflow QUALITY_SPLIT {
   FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
 }
 
-workflow QUALITY_FLOW {
+workflow ONLY_QC {
 	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
                         .collect()
 
@@ -65,22 +65,14 @@ workflow AMPLICON_RUN {
 	NANOFILT_AMPLICON(QCAT.out.demultiplexed_ch.flatten())
 }
 
-workflow ASSEMBLY_RUN {
-	fast5_ch=channel.fromPath(params.reads, checkIfExists: true)
-                        .collect()
 
-	GUPPY(fast5_ch)
-	NANOPLOT_AMPLICON(GUPPY.out.summary_ch.collect())
-	QCAT(GUPPY.out.fastq_ch.collect())
-	NANOFILT_AMPLICON(QCAT.out.demultiplexed_ch.flatten())
-}
 
 
 // selecting the correct workflow based on user choice defined in main.config.
 
 workflow {
 if (params.type == "basic") {
-	QUALITY_FLOW()
+	ONLY_QC()
 	}
 
 if (params.type == "amplicon") {
@@ -88,10 +80,6 @@ if (params.type == "amplicon") {
 	}
 
 if (params.type == "assembly") {
-	ASSEMBLY_RUN()
-	}
-
-if (params.type == "split") {
-	QUALITY_SPLIT()
+	BACTERIAL_ASM()
 	}
 }

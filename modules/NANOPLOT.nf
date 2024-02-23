@@ -6,7 +6,7 @@ process NANOPLOT_BASIC {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/02_nanoplot_basic/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/03_nanoplot_basic/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -33,7 +33,7 @@ process NANOPLOT_BASIC {
 process NANOPLOT_AMPLICON {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/02_nanoplot_amplicon/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/03_nanoplot_amplicon/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -60,7 +60,7 @@ process NANOPLOT_AMPLICON {
 process NANOPLOT_CLEAN {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/02_nanoplot_amplicon/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/03_nanoplot_amplicon/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
