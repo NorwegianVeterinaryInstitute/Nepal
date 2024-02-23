@@ -1,7 +1,7 @@
 // this module runs the latest version of GUPPY.
 
 // Process Guppy is used for basecalling the fast5 raw data files.
-process GUPPY {
+process GUPPY_BASIC {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7"
 	publishDir "${params.out_dir}/01_guppy/", pattern: "logs/guppy_basecaller_*.log", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
@@ -24,7 +24,7 @@ process GUPPY {
 
   guppy_basecaller -x "cuda:all" \
         -c /cluster/projects/nn9305k/src/miniconda/envs/guppy_gpu_v6.5.7/data/dna_r10.4.1_e8.2_400bps_sup.cfg \
-        --barcode_kits SQK-RBK114-24 \
+        --barcode_kits $params.guppy.barcode \
 		--detect_barcodes \
 		--detect_mid_strand_barcodes \
 		--enable_trim_barcodes \
