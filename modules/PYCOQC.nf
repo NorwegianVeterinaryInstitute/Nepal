@@ -26,3 +26,31 @@ process PYCOQC_BASIC {
 	"""
 
 }
+
+
+// Nanoplot settings for the raw data when using the basic pipeline
+// This will show all the reads that are coming from Guppy.
+process PYCOQC_SIMPLEX {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/pycoqc_2.5.2"
+
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+
+	label 'tiny'
+
+	input:
+	file("*")
+
+
+	output:
+	path "*.html"
+
+	script:
+	"""
+
+	pycoQC -f $x -o pycoQC_simplex_stats.html
+
+
+	"""
+
+}

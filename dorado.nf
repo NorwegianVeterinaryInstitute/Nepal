@@ -41,7 +41,17 @@ workflow SIMPLEX_ASM {
                         .collect()
 
 	DORADO_SIMPLEX(pod5_ch)
-	//NANOPLOT_BASIC(GUPPY_BASIC.out.summary_ch.collect())
+	//NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
+    //PYCOQC_SIMPLEX_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
 	//NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())
     //FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
+}
+
+// selecting the correct workflow based on user choice defined in main.config.
+
+workflow {
+if (params.type == "assembly") {
+	SIMPLEX_ASM()
+	}
+}

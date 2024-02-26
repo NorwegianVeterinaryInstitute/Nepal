@@ -80,3 +80,31 @@ process NANOPLOT_CLEAN {
 	"""
 
 }
+
+
+// Nanoplot settings for the analysis of bam files that are produced by Dorado.
+// This will show all the reads that are coming from dorado 
+process NANOPLOT_SIMPLEX {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+
+	label 'tiny'
+
+	input:
+	file("*")
+
+
+	output:
+	path "*-plots-log-transformed"
+
+	script:
+	"""
+
+	NanoPlot -t 4 --ubam $x --plots hex dot --title Summary_simplex_reads -o Nanoplot-plots-log-transformed
+
+
+	"""
+
+}

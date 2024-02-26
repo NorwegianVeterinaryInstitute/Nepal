@@ -20,7 +20,8 @@ The current tools that are included in the pipeline are:
 # Setting up your analysis
 1. Download this repository to your project folder with the command:
     `https://github.com/NorwegianVeterinaryInstitute/Nepal.git`.
-2. In the directory Nepal that is now created, you find a file called: `sample_sheet.csv`. You can modify this file in the 
+2. In the directory Nepal that is now created, you find a file called: `sample_sheet.csv`. You can modify this file using nano or with a text editor such as vscode, so that multiplex datasets get the right names. 
+3. You also need to modify the fill `main.config`, so that the basecaller you select `dorado` or `guppy` uses the right model, the correct sequencing / barcode kit that was used.  
 
 
 # How to run this pipeline
