@@ -6,7 +6,7 @@ process NANOPLOT_BASIC {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/03_nanoplot_basic/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -15,12 +15,12 @@ process NANOPLOT_BASIC {
 
 
 	output:
-	path "*.summary-plots-log-transformed"
+	path "*-plots-log-transformed"
 
 	script:
 	"""
 
-	NanoPlot -t 4 --summary $summary --plots hex dot --title Sequencing_Summary -o Sequencing.summary-plots-log-transformed
+	NanoPlot -t 4 --summary $summary --plots hex dot --title Sequencing_Summary -o Nanoplot-plots-log-transformed
 
 
 	"""
@@ -33,7 +33,7 @@ process NANOPLOT_BASIC {
 process NANOPLOT_AMPLICON {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/03_nanoplot_amplicon/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -42,12 +42,12 @@ process NANOPLOT_AMPLICON {
 
 
 	output:
-	path "*.summary-plots-log-transformed"
+	path "*-plots-log-transformed"
 
 	script:
 	"""
 
-	NanoPlot -t 4 --summary $summary --maxlength 3000 --plots hex dot --title Sequencing_Summary -o Sequencing.summary-plots-log-transformed
+	NanoPlot -t 4 --summary $summary --maxlength 3000 --plots hex dot --title Sequencing_Summary -o NanoPlot-plots-log-transformed
 
 
 	"""
@@ -60,7 +60,7 @@ process NANOPLOT_AMPLICON {
 process NANOPLOT_CLEAN {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
 
-	publishDir "${params.out_dir}/03_nanoplot_amplicon/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -69,12 +69,12 @@ process NANOPLOT_CLEAN {
 
 
 	output:
-	path "*.summary-plots-log-transformed"
+	path "*-plots-log-transformed"
 
 	script:
 	"""
 
-	NanoPlot -t 4 --fastq_minimal barcode*.gz --plots hex dot --title Clean_data_Summary -o Clean_data.summary-plots-log-transformed
+	NanoPlot -t 4 --fastq_minimal barcode*.gz --plots hex dot --title Clean_data_Summary -o NanoPlot-plots-log-transformed
 
 
 	"""

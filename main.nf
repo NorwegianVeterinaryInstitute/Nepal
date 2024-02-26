@@ -20,6 +20,7 @@ log.info """\
          Nanopore flowcell              : ${params.flowcell}
          Nanopore sequencing kit        : ${params.seqkit}
          Nanopore barcode kit guppy     : ${params.guppy.barcode}
+		 Nanopore GUPPY model selected  : ${params.guppy.model}
         --------------------------------- ---------------------------------
 
 		 """
