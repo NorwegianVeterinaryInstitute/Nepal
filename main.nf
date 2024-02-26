@@ -30,6 +30,7 @@ log.info """\
 	// For ALL workflows 
 	include { GUPPY_BASIC } from "${params.module_dir}/GUPPY.nf"
   	include { NANOPLOT_BASIC } from "${params.module_dir}/NANOPLOT.nf"
+	include { PYCOQC_BASIC } from "${params.module_dir}/PYCOQC.nf"
   	include { DUPLEX_SPLIT } from "${params.module_dir}/DUPLEXTOOLS.nf"
   	include {NANOFILT_BASIC } from "${params.module_dir}/NANOFILT.nf"
   	include {FLY_BASIC } from "${params.module_dir}/FLYE.nf"
@@ -44,6 +45,7 @@ workflow BACTERIAL_ASM {
                         .collect()
 	GUPPY_BASIC(fast5_ch)
 	NANOPLOT_BASIC(GUPPY_BASIC.out.summary_ch.collect())
+	PYCOQC_BASIC(GUPPY_BASIC.out.summary_ch.collect())
 	DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
 	NANOFILT_BASIC(DUPLEX_SPLIT.out.demultiplexed_ch.flatten())
     FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
