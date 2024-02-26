@@ -13,6 +13,7 @@ process DORADO_SIMPLEX {
 	file("*")
 
 	output:
+	path "basecalls.bam", emit summary_ch,demultiplex_ch 
 	//path "fastq/pass/barcode*", emit: fastq_ch
 	//path "fastq"
 	//file("logs/guppy_basecaller_*.log")
@@ -20,5 +21,7 @@ process DORADO_SIMPLEX {
 
 	script:
 	"""
+	dorado basecaller -x "cuda:all" --min-qscore 7 --no-trim --emit-fastq $params.dorado.moddir/$params.dorado.model pod5 > basecalls.bam
 
 	"""
+}

@@ -18,14 +18,13 @@ log.info """\
          Temporary - directory          : ${workDir}
         --------------------------------- ---------------------------------
          Nanopore flowcell              : ${params.flowcell}
-         Nanopore sequencing kit        : ${params.seqkit}
-         Nanopore barcode kit Dorado     : ${params.dorado.barcode}
+         Nanopore barcode kit Dorado    : ${params.dorado.barcode}
+         Dorado model directory         : ${params.dorado.moddir}
+         Dorado model selected          : ${params.dorado.model}
         --------------------------------- ---------------------------------
 
 		 """
          .stripIndent()
-
-// modules for workflows
 
 // modules for workflows
 
