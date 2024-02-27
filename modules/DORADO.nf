@@ -15,11 +15,16 @@ process DORADO_SIMPLEX {
 	file("*")
 
 	output:
-	path "basecalls.bam", emit: summary_ch
+	//path "basecalls.bam", emit: summary_ch,demultiplexed_ch
+	path "basecalls.bam", emit: demultiplexed_ch
+	path "sequencing_summary.txt", emit: summary_ch
 
 	script:
 	"""
-	dorado basecaller -x "cuda:all" --min-qscore 7 --no-trim --emit-fastq $params.dorado.moddir/$params.dorado.model pod5 > basecalls.bam
+	dorado basecaller -x "cuda:all" --min-qscore 7 --no-trim $params.dorado.moddir/$params.dorado.model pod5 > basecalls.bam
+
+	# creating a summary file for calculating stats
+	dorado summary basecalls.bam > sequencing_summary.txt
 
 	"""
 

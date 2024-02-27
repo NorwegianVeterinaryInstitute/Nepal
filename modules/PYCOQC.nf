@@ -29,7 +29,7 @@ process PYCOQC_BASIC {
 
 
 // Nanoplot settings for the raw data when using the basic pipeline
-// This will show all the reads that are coming from Guppy.
+// This will show all the reads that are coming from dorado simplex.
 process PYCOQC_SIMPLEX {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/pycoqc_2.5.2"
@@ -39,7 +39,7 @@ process PYCOQC_SIMPLEX {
 	label 'tiny'
 
 	input:
-	file("*")
+	file(summary)
 
 
 	output:
@@ -48,9 +48,8 @@ process PYCOQC_SIMPLEX {
 	script:
 	"""
 
-	pycoQC -f $x -o pycoQC_simplex_stats.html
+	pycoQC -q -f $summary -o pycoQC_basecalling_stats.html
 
 
 	"""
-
 }

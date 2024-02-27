@@ -4,7 +4,7 @@
 // This will show all the reads that are coming from Guppy.
 process NANOPLOT_BASIC {
 	executor="local"
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
 	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
@@ -31,7 +31,7 @@ process NANOPLOT_BASIC {
 // This will show reads with a max length of 3000 bp, longer sequences are likely not correct for amplicon sequencing.
 
 process NANOPLOT_AMPLICON {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
 	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
@@ -58,7 +58,7 @@ process NANOPLOT_AMPLICON {
 // This will show reads with a max length of 3000 bp, longer sequences are likely not correct for amplicon sequencing.
 
 process NANOPLOT_CLEAN {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
 	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
@@ -86,14 +86,14 @@ process NANOPLOT_CLEAN {
 // This will show all the reads that are coming from dorado 
 process NANOPLOT_SIMPLEX {
 	executor="local"
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
 	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
 	input:
-	file("*")
+	file(summary)
 
 
 	output:
@@ -102,9 +102,10 @@ process NANOPLOT_SIMPLEX {
 	script:
 	"""
 
-	NanoPlot -t 4 --ubam $x --plots hex dot --title Summary_simplex_reads -o Nanoplot-plots-log-transformed
+	NanoPlot -t 4 --summary $summary --plots hex dot --title Sequencing_Summary -o Nanoplot-plots-log-transformed
 
 
 	"""
+
 
 }
