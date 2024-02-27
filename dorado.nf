@@ -49,7 +49,8 @@ workflow SIMPLEX_ASM {
     DORADO_DEMUX(DORADO_SIMPLEX.out.simplex_ch.flatten())
     SAMTOOLS_READIDS(DORADO_DEMUX.out.demux_ch.flatten())
     DORADO_DUPLEX(pod5_ch.combine(SAMTOOLS_READIDS.out.readid_ch))
-    //DORADO_DUPLEX(DORADO_DEMUX.out.demux_ch.flatten())
+    SAMTOOLS_EXTRACT(DORADO_DUPLEX.out.duplex_ch.flatten())
+ 
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     
