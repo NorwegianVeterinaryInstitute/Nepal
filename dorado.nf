@@ -30,6 +30,7 @@ log.info """\
 
 	// For ALL workflows 
 	include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
+    include { DORADO_DEMUX } from "${params.module_dir}/DORADO.nf"
   	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
     include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
 
@@ -44,6 +45,7 @@ workflow SIMPLEX_ASM {
 	DORADO_SIMPLEX(pod5_ch)
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
+    DORADO_DEMUX(DORADO_SIMPLEX.out.demultiplexed_ch.collect())
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
 	//NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())
     //FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
