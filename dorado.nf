@@ -31,8 +31,11 @@ log.info """\
 	// For ALL workflows 
 	include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
     include { DORADO_DEMUX } from "${params.module_dir}/DORADO.nf"
+    include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
   	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
+    include { SAMTOOLS_EXTRACT } from "${params.module_dir}/SAMTOOLS.nf"
     include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
+    include { DORADO_DUPLEX } from "${params.module_dir}/DORADO.nf"
 
 	
 
@@ -43,9 +46,13 @@ workflow SIMPLEX_ASM {
                         .collect()
 
 	DORADO_SIMPLEX(pod5_ch)
+    DORADO_DEMUX(DORADO_SIMPLEX.out.simplex_ch.flatten())
+    SAMTOOLS_READIDS(DORADO_DEMUX.out.demux_ch.flatten())
+    DORADO_DUPLEX(pod5_ch.combine(SAMTOOLS_READIDS.out.readid_ch))
+    //DORADO_DUPLEX(DORADO_DEMUX.out.demux_ch.flatten())
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
-    DORADO_DEMUX(DORADO_SIMPLEX.out.demultiplexed_ch.collect())
+    
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
 	//NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())
     //FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
