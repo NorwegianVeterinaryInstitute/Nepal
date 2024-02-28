@@ -39,7 +39,8 @@ process SAMTOOLS_EXTRACT {
 	file(x)
 
 	output:
-	path "*.fastq.gz", emit: extract_ch
+	path "*.{duplex,simplex}.fastq.gz", emit: extract_ch
+	path "*.ds.fastq.gz", emit: filter_ch
 
 	script:
 	samplename = x.toString() - ~/.bam$/
@@ -56,6 +57,8 @@ process SAMTOOLS_EXTRACT {
 	bedtools bamtofastq -i ${samplename}.simplex.bam -fq ${samplename}.simplex.fastq
 
 	pigz -9 *.fastq
+
+	cat ${samplename}.duplex.fastq.gz ${samplename}.simplex.fastq.gz > ${samplename}.ds.fastq.gz
 
 	"""
 

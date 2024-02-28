@@ -39,6 +39,7 @@ log.info """\
     include { SAMTOOLS_EXTRACT } from "${params.module_dir}/SAMTOOLS.nf"
     include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
     include { SEQKIT_STATS } from "${params.module_dir}/SEQKIT.nf"
+    include { NANOFILT_DUPLEX } from "${params.module_dir}/NANOFILT.nf"
     
 	
 
@@ -55,6 +56,9 @@ workflow SIMPLEX_ASM {
     // process reads to get duplex and simplex reads
     DORADO_DUPLEX(pod5_ch.combine(SAMTOOLS_READIDS.out.readid_ch))
     SAMTOOLS_EXTRACT(DORADO_DUPLEX.out.duplex_ch.flatten())
+
+    // filtering the reads to remove poor reads
+    NANOFILT_DUPLEX(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
 
     // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
