@@ -45,12 +45,15 @@ workflow SIMPLEX_ASM {
 	pod5_ch=channel.fromPath(params.reads, checkIfExists: true)
                         .collect()
 
-	DORADO_SIMPLEX(pod5_ch)
+    // process reads to get demultiplexed reads IDs
+	DORADO_SIMPLEX(pod5_ch)   
     DORADO_DEMUX(DORADO_SIMPLEX.out.simplex_ch.flatten())
     SAMTOOLS_READIDS(DORADO_DEMUX.out.demux_ch.flatten())
+    // process reads to get duplex and simplex reads
     DORADO_DUPLEX(pod5_ch.combine(SAMTOOLS_READIDS.out.readid_ch))
     SAMTOOLS_EXTRACT(DORADO_DUPLEX.out.duplex_ch.flatten())
- 
+
+    // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     
