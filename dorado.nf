@@ -29,14 +29,17 @@ log.info """\
 // modules for workflows
 
 	// For ALL workflows 
-	include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
+	
     include { DORADO_DEMUX } from "${params.module_dir}/DORADO.nf"
-    include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
-  	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
-    include { SAMTOOLS_EXTRACT } from "${params.module_dir}/SAMTOOLS.nf"
-    include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
     include { DORADO_DUPLEX } from "${params.module_dir}/DORADO.nf"
-
+    include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
+  	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
+    include { NANOPLOT_FASTQ } from "${params.module_dir}/NANOPLOT.nf"
+    include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
+    include { SAMTOOLS_EXTRACT } from "${params.module_dir}/SAMTOOLS.nf"
+    include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
+    include { SEQKIT_STATS } from "${params.module_dir}/SEQKIT.nf"
+    
 	
 
 // workflows
@@ -56,6 +59,9 @@ workflow SIMPLEX_ASM {
     // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
+    NANOPLOT_FASTQ(SAMTOOLS_EXTRACT.out.extract_ch.collect())
+    SEQKIT_STATS(SAMTOOLS_EXTRACT.out.extract_ch.collect())
+    
     
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
 	//NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())
