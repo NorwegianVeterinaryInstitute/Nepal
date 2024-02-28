@@ -41,6 +41,7 @@ log.info """\
     include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
     include { SEQKIT_STATS } from "${params.module_dir}/SEQKIT.nf"
     include { SEQKIT_NFILT } from "${params.module_dir}/SEQKIT.nf"
+    include { FLYE_DUPLEX } from "${params.module_dir}/FLYE.nf"
     
     
 	
@@ -62,12 +63,16 @@ workflow SIMPLEX_ASM {
     // filtering the reads to remove poor reads
     NANOFILT_DUPLEX(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
 
+    // Doing an assembly with FLYE on all samples
+    FLYE_DUPLEX(NANOFILT_DUPLEX.out.nfilt_ch.flatten())
+
     // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     NANOPLOT_FASTQ(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_STATS(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_NFILT(NANOFILT_DUPLEX.out.nfilt_ch.collect())
+    
     
     
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())

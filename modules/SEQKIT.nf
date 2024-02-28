@@ -23,7 +23,7 @@ process SEQKIT_STATS {
 
 	cat duplex_stats.txt simplex_stats.txt > duplex_simplex_stats.txt
 
-	rm -r duplex_stats simplex_stats.txt
+	rm -r duplex_stats.txt simplex_stats.txt
 
 	"""
 

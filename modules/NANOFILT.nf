@@ -75,13 +75,13 @@ process NANOFILT_DUPLEX {
 	file(x)
 
 	output:
-	tuple val(samplename), path('*.NFilt.fastq.gz'), emit: nfilt_ch
+	tuple val(samplename), path('*nfilt.fastq.gz'), emit: nfilt_ch
 
 	script:
-	samplename = x.toString() - ~/.fastq.gz$/
+	samplename = x.toString() - ~/.ds.fastq.gz$/
 	"""
 	ls -la
-	gunzip -c *.gz | NanoFilt -q 7 -l 300 | gzip > ${samplename}.NFilt.fastq.gz
+	gunzip -c *.gz | NanoFilt -q 7 -l 300 | gzip > ${samplename}.nfilt.fastq.gz
 
 	"""
 }

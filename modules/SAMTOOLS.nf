@@ -52,9 +52,14 @@ process SAMTOOLS_EXTRACT {
 	samtools view -b -h -d dx:0 ${samplename}.bam > ${samplename}.simplex.bam
 
 	## making fastq datasets
-	bedtools bamtofastq -i ${samplename}.duplex.bam -fq ${samplename}.duplex.fastq
+	samtools bam2fq ${samplename}.duplex.bam > ${samplename}.duplex.fastq
 
-	bedtools bamtofastq -i ${samplename}.simplex.bam -fq ${samplename}.simplex.fastq
+	samtools bam2fq ${samplename}.simplex.bam > ${samplename}.simplex.fastq
+
+	## the duplex files have headers with a double name, downstream analysis are stopped because of that.
+	## I change the header to be one long line, by replacing the ; for an _
+
+	##sed -i '1~4s/;.*//' ${samplename}.duplex.fastq
 
 	pigz -9 *.fastq
 
