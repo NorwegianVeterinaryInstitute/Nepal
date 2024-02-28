@@ -75,7 +75,7 @@ process NANOFILT_DUPLEX {
 	file(x)
 
 	output:
-	tuple val(samplename), path('*.NFilt.fastq.gz'), emit: trimmed_ch
+	tuple val(samplename), path('*.NFilt.fastq.gz'), emit: nfilt_ch
 
 	script:
 	samplename = x.toString() - ~/.fastq.gz$/

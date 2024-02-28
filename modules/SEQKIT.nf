@@ -27,3 +27,27 @@ process SEQKIT_STATS {
 
 
 }
+
+process SEQKIT_NFILT {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
+
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+
+	label 'medium'
+
+	input:
+	file(x)
+
+
+	output:
+	path "*.txt"
+
+	script:
+	"""
+	seqkit stats -j 8 *.fastq.gz --all -T > Nanofilt_out_stats.txt
+
+	"""
+
+
+}

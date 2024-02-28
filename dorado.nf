@@ -33,13 +33,15 @@ log.info """\
     include { DORADO_DEMUX } from "${params.module_dir}/DORADO.nf"
     include { DORADO_DUPLEX } from "${params.module_dir}/DORADO.nf"
     include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
+    include { NANOFILT_DUPLEX } from "${params.module_dir}/NANOFILT.nf"
   	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
     include { NANOPLOT_FASTQ } from "${params.module_dir}/NANOPLOT.nf"
     include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
     include { SAMTOOLS_EXTRACT } from "${params.module_dir}/SAMTOOLS.nf"
     include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
     include { SEQKIT_STATS } from "${params.module_dir}/SEQKIT.nf"
-    include { NANOFILT_DUPLEX } from "${params.module_dir}/NANOFILT.nf"
+    include { SEQKIT_NFILT } from "${params.module_dir}/SEQKIT.nf"
+    
     
 	
 
@@ -65,6 +67,7 @@ workflow SIMPLEX_ASM {
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     NANOPLOT_FASTQ(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_STATS(SAMTOOLS_EXTRACT.out.extract_ch.collect())
+    SEQKIT_NFILT(NANOFILT_DUPLEX.out.nfilt_ch.collect())
     
     
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
