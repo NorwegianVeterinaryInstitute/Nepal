@@ -41,6 +41,7 @@ log.info """\
     include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
     include { SEQKIT_STATS } from "${params.module_dir}/SEQKIT.nf"
     include { SEQKIT_NFILT } from "${params.module_dir}/SEQKIT.nf"
+    include { SEQKIT_FLYE } from "${params.module_dir}/SEQKIT.nf"
     include { FLYE_DUPLEX } from "${params.module_dir}/FLYE.nf"
     
     
@@ -72,7 +73,7 @@ workflow SIMPLEX_ASM {
     NANOPLOT_FASTQ(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_STATS(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_NFILT(NANOFILT_DUPLEX.out.nfilt_ch.collect())
-    
+    SEQKIT_FLYE(FLYE_DUPLEX.out.assembly_ch.flatten())
     
     
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())

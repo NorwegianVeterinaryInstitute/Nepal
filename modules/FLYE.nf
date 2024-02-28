@@ -47,12 +47,16 @@ process FLYE_DUPLEX {
 	file(x)
 
 	output:
-	tuple val(samplename), path {"*"}, emit: assembly_ch
+	tuple val(samplename), path {"*"}
+	path {"*.flye.asm.fasta"}, emit: assembly_ch
 
 	script:
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
 	"""
 	ls -la
   flye --nano-raw *.fastq.gz --out-dir ${samplename} --threads 8
+
+    ln -s ${samplename}/assembly.fasta ./${samplename}.flye.asm.fasta
+
 	"""
 }

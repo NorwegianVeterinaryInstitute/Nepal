@@ -53,3 +53,29 @@ process SEQKIT_NFILT {
 
 
 }
+
+
+process SEQKIT_FLYE {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
+
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+
+	label 'tiny'
+
+	input:
+	file(x)
+
+
+	output:
+	path "*.txt"
+
+	script:
+	samplename = x.toString() - ~/.flye.asm.fasta$/
+	"""
+	seqkit stats -j 8 *.flye.asm.fasta --all -T > ${samplename}.asm_stats.txt
+
+	"""
+
+
+}
