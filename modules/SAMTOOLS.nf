@@ -7,6 +7,7 @@ process SAMTOOLS_READIDS {
 	
 	publishDir "${params.out_dir}/04_readid/", pattern: "*.txt", mode: "copy"
 	
+	label 'medium'
 
 	input:
 	file(x)
@@ -32,6 +33,7 @@ process SAMTOOLS_EXTRACT {
 	
 	publishDir "${params.out_dir}/04_readid/", pattern: "*.fastq.gz", mode: "copy"
 	
+	label 'medium'
 
 	input:
 	file(x)

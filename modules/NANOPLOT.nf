@@ -109,3 +109,32 @@ process NANOPLOT_SIMPLEX {
 
 
 }
+
+// Nanoplot settings for the analysis of bam files that are produced by Dorado.
+// This will show all the reads that are coming from dorado 
+process NANOPLOT_FASTQ {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
+
+	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+
+	label 'medium'
+
+	input:
+	file(x)
+
+
+	output:
+	path "*_plots-log-transformed"
+
+	script:
+	"""
+	
+	NanoPlot -t 8 --fastq *.duplex.fastq.gz  --plots hex dot --title Duplex_reads_all_samples -o Nanoplot-duplex_plots-log-transformed
+	
+	NanoPlot -t 8 --fastq *.simplex.fastq.gz  --plots hex dot --title simplex_reads_all_samples -o Nanoplot-simplex_plots-log-transformed
+
+	"""
+
+
+}
