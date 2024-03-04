@@ -8,7 +8,7 @@ process NANOFILT_BASIC {
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt_2.8.0"
 
-	publishDir "${params.out_dir}/04_nanofilt_basic/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/nanofilt_reads/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -38,7 +38,7 @@ process NANOFILT_AMPLICON {
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt_2.8.0"
 
-	publishDir "${params.out_dir}/04_nanofilt_amplicon/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/nanofilt_reads/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -67,7 +67,7 @@ process NANOFILT_DUPLEX {
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanofilt_2.8.0"
 
-	publishDir "${params.out_dir}/04_nanofilt_basic/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/nanofilt_reads/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 

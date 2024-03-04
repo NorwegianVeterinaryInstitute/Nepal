@@ -6,7 +6,7 @@ process PYCOQC_BASIC {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/pycoqc_2.5.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -34,7 +34,7 @@ process PYCOQC_SIMPLEX {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/pycoqc_2.5.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 

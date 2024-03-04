@@ -11,7 +11,7 @@ process FLY_BASIC {
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/flye"
 
-	publishDir "${params.out_dir}/05_fly_asm/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/flye_asm/", pattern: "*", mode: "copy"
 
 	label 'medium'
 
@@ -38,7 +38,7 @@ process FLYE_DUPLEX {
 
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/flye"
 
-	publishDir "${params.out_dir}/05_fly_asm/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/flye_asm/", pattern: "*", mode: "copy"
 
 	label 'medium'
 

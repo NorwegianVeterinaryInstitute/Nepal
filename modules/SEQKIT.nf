@@ -4,7 +4,7 @@ process SEQKIT_STATS {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'medium'
 
@@ -34,7 +34,7 @@ process SEQKIT_NFILT {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'medium'
 
@@ -59,7 +59,7 @@ process SEQKIT_FLYE {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 

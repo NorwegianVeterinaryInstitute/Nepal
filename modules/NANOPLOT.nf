@@ -6,7 +6,7 @@ process NANOPLOT_BASIC {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -33,7 +33,7 @@ process NANOPLOT_BASIC {
 process NANOPLOT_AMPLICON {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -60,7 +60,7 @@ process NANOPLOT_AMPLICON {
 process NANOPLOT_CLEAN {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -88,7 +88,7 @@ process NANOPLOT_SIMPLEX {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'tiny'
 
@@ -116,7 +116,7 @@ process NANOPLOT_FASTQ {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
-	publishDir "${params.out_dir}/03_basecalling_stats/", pattern: "*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
 	label 'medium'
 
