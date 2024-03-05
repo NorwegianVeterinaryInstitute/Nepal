@@ -13,7 +13,7 @@ process FLY_BASIC {
 
 	publishDir "${params.out_dir}/flye_asm/", pattern: "*", mode: "copy"
 
-	label 'medium'
+	label 'heavy'
 
 	input:
 	tuple val(samplename), file(x)
@@ -24,7 +24,7 @@ process FLY_BASIC {
 	script:
 	"""
 	ls -la
-  flye --nano-raw *.trimmed.fastq.gz --out-dir ${samplename} --threads 8
+  flye --nano-raw *.trimmed.fastq.gz --out-dir ${samplename} --threads 20
 	"""
 }
 
@@ -40,7 +40,7 @@ process FLYE_DUPLEX {
 
 	publishDir "${params.out_dir}/flye_asm/", pattern: "*", mode: "copy"
 
-	label 'medium'
+	label 'heavy'
 
 	input:
 	//tuple val(samplename), file(x)
@@ -54,7 +54,7 @@ process FLYE_DUPLEX {
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
 	"""
 	ls -la
-  flye --nano-raw *.fastq.gz --out-dir ${samplename} --threads 8
+  flye --nano-raw *.fastq.gz --out-dir ${samplename} --threads 20
 
     ln -s ${samplename}/assembly.fasta ./${samplename}.flye.asm.fasta
 
