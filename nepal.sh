@@ -13,7 +13,7 @@ cp ${script_directory}/*.nf ${outdir}/config_files
 cp ${config} ${outdir}/config_files
 
 ## running the pipeline
-nextflow_21.10.6 run ${script_directory}/main.nf \
+nextflow_23.04.4 run ${script_directory}/main.nf \
 	-c ${config} \
 	--out_dir=${outdir} \
 	-work-dir ${workdir} \
