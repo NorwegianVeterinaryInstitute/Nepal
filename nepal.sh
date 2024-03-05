@@ -12,8 +12,8 @@ mkdir -p ${outdir}/nextflow_reports
 cp ${script_directory}/*.nf ${outdir}/config_files
 cp ${config} ${outdir}/config_files
 
-#nextflow_21.10.6 run ${script_directory}/main.nf -c ${config} --out_dir=${outdir} -work-dir ${workdir} -resume -with-report $DATE.report.html
-nextflow_21.10.6 run ${script_directory}/dorado.nf \
+## running the pipeline
+nextflow_21.10.6 run ${script_directory}/main.nf \
 	-c ${config} \
 	--out_dir=${outdir} \
 	-work-dir ${workdir} \
