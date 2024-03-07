@@ -41,7 +41,14 @@ The current tools that are included in the pipeline are:
 
         git clone https://github.com/NorwegianVeterinaryInstitute/Nepal.git 
 
-4. You also need to modify the fill `main.config`, so that the basecaller you select `dorado` or `guppy` uses the right model, the correct sequencing / barcode kit that was used.  
+4. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
+    * `simplex_assembly` - A workflow that will use all reads produced from the Nanopore machine to do an assembly with Flye.
+    * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
+    * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice.
+
+5. Edit the file `main.config`, to indicate where the data, the sample sheet are located.
+6. Edit the file `main.config`, to indicate which sequencing / barcoding kit you have used, and what basecalling model you want to use. If you are unsure which model to pick, I suggest you pick the one that has "SUP" in the name, because that will give you the most accurate basecalls and the best data. If you are in a hurry, than use FAST, but you will lose more data that way.
+7. Edit in the file `main.config`, the settings for Nanofilt, if you want to use different cut-off for the minimum quality or length. For Amplicons you also need to set the maximum length correctly. For full lenght 16s rRNA sequences you could use: minlenght = "1450" & maxlength = "1600". But do check that is is not discarding too many of your reads.
 
 
 # How to run this pipeline
