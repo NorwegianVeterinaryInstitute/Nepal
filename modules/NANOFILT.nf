@@ -82,7 +82,7 @@ process NANOFILT_DUPLEX {
 	samplename = x.toString() - ~/.ds.fastq.gz$/
 	"""
 	ls -la
-	gunzip -c *.gz | NanoFilt -q 7 -l 300 | gzip > ${samplename}.nfilt.fastq.gz
+	gunzip -c *.gz | NanoFilt -q $params_quality -l $params_minlength --maxlength $params_maxlength | gzip > ${samplename}.nfilt.fastq.gz
 
 	"""
 }
