@@ -25,9 +25,6 @@ The current tools that are included in the pipeline are:
     * Seqkit
 
 
-
-
-
 # Setting up your analysis
 1. Prepare your input data. If your data is in FAST5 format, you have to convert it to pod 5. You do that by starting up the conda environment `pod5_0.3.6`. 
 
@@ -38,12 +35,11 @@ The current tools that are included in the pipeline are:
         pod5 convert fast5 -t 8 fast5/*.fast5 -o pod5 --one-to-one ./
     This will create a folder called pod5, which contains the input data for the NEPAL pipeline
 
-2. Download this repository to your project folder with the command:
+2. In the directory Nepal that is now created, you find a comma-seperated file called: `sample_sheet.csv`. You can modify this file using nano or with a text editor such as vscode. The column for the alias is there so that the demultiplexed datasets get the right names.
 
-        git clone https://github.com/NorwegianVeterinaryInstitute/Nepal.git
+3. Now download this repository to your project folder with the command:
 
-
-3. In the directory Nepal that is now created, you find a file called: `sample_sheet.csv`. You can modify this file using nano or with a text editor such as vscode, so that multiplex datasets get the right names. 
+        git clone https://github.com/NorwegianVeterinaryInstitute/Nepal.git 
 
 4. You also need to modify the fill `main.config`, so that the basecaller you select `dorado` or `guppy` uses the right model, the correct sequencing / barcode kit that was used.  
 
