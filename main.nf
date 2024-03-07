@@ -21,9 +21,10 @@ log.info """\
          Nanopore barcode kit Dorado    : ${params.dorado.barcode}
          Dorado model directory         : ${params.dorado.moddir}
          Dorado model selected          : ${params.dorado.model}
-         Nanfilt quality                : ${params.quality}
-         Nanfilt minlength              : ${params.minlength}
-         Nanfilt maxlength              : ${params.maxlength}
+        --------------------------------- ---------------------------------
+         Nanofilt quality               : ${params.quality}
+         Nanofilt minlength             : ${params.minlength}
+         Nanofilt maxlength             : ${params.maxlength}
         --------------------------------- ---------------------------------
 
 		 """
@@ -68,14 +69,14 @@ workflow DUPLEX_ASM {
     NANOFILT(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
 
     // Doing an assembly with FLYE on all samples
-    FLYE_DUPLEX(NANOFILT_DUPLEX.out.nfilt_ch.flatten())
+    FLYE_DUPLEX(NANOFILT.out.nfilt_ch.flatten())
 
     // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     NANOPLOT_FASTQ(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_STATS(SAMTOOLS_EXTRACT.out.extract_ch.collect())
-    SEQKIT_NFILT(NANOFILT_DUPLEX.out.nfilt_ch.collect())
+    SEQKIT_NFILT(NANOFILT.out.nfilt_ch.collect())
     SEQKIT_FLYE(FLYE_DUPLEX.out.assembly_ch.flatten())
     
     

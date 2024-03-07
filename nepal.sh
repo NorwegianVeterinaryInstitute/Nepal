@@ -6,6 +6,13 @@ config=$1
 outdir=$2
 workdir=${3:-$USERWORK/nepal}
 
+if [ ! -d "$workdir" ]; then
+    mkdir "$workdir"
+    echo "Folder $workdir created successfully and will be used to store temporary files"
+else
+    echo "Using folder $workdir to store temporary files"
+fi
+
 DATE=($(date "+%Y%m%d_%R"))
 mkdir -p ${outdir}/config_files
 mkdir -p ${outdir}/nextflow_reports
