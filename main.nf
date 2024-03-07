@@ -49,7 +49,7 @@ log.info """\
 
 // workflows
 
-workflow SIMPLEX_ASM {
+workflow DUPLEX_ASM {
 	pod5_ch=channel.fromPath(params.reads, checkIfExists: true)
                         .collect()
 
@@ -84,7 +84,7 @@ workflow SIMPLEX_ASM {
 // selecting the correct workflow based on user choice defined in main.config.
 
 workflow {
-if (params.type == "assembly") {
-	SIMPLEX_ASM()
+if (params.type == "duplex_assembly") {
+	DUPLEX_ASM()
 	}
 }
