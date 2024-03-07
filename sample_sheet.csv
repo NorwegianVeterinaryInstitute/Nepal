@@ -1,5 +1,5 @@
 flow_cell_id,kit,experiment_id,barcode,alias
-FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode01,sample01
+FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode01,my_first_sample
 FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode02,sample02
 FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode03,sample03
 FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode04,sample04

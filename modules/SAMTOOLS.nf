@@ -5,7 +5,7 @@
 process SAMTOOLS_READIDS {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/samtools_1.19.2"
 	
-	publishDir "${params.out_dir}/04_readid/", pattern: "*.txt", mode: "copy"
+	publishDir "${params.out_dir}/readids/", pattern: "*.txt", mode: "copy"
 	
 	label 'medium'
 
@@ -31,7 +31,7 @@ process SAMTOOLS_READIDS {
 process SAMTOOLS_EXTRACT {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/samtools_1.19.2"
 	
-	publishDir "${params.out_dir}/04_readid/", pattern: "*.fastq.gz", mode: "copy"
+	publishDir "${params.out_dir}/simplex_duplex_reads/", pattern: "*.fastq.gz", mode: "copy"
 	
 	label 'medium'
 
