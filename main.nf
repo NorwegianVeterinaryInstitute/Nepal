@@ -21,6 +21,9 @@ log.info """\
          Nanopore barcode kit Dorado    : ${params.dorado.barcode}
          Dorado model directory         : ${params.dorado.moddir}
          Dorado model selected          : ${params.dorado.model}
+         Nanfilt quality                : ${params.quality}
+         Nanfilt minlength              : ${params.minlength}
+         Nanfilt maxlength              : ${params.maxlength}
         --------------------------------- ---------------------------------
 
 		 """
@@ -33,7 +36,7 @@ log.info """\
     include { DORADO_DEMUX } from "${params.module_dir}/DORADO.nf"
     include { DORADO_DUPLEX } from "${params.module_dir}/DORADO.nf"
     include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
-    include { NANOFILT_DUPLEX } from "${params.module_dir}/NANOFILT.nf"
+    include { NANOFILT } from "${params.module_dir}/NANOFILT.nf"
   	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
     include { NANOPLOT_FASTQ } from "${params.module_dir}/NANOPLOT.nf"
     include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
@@ -62,7 +65,7 @@ workflow DUPLEX_ASM {
     SAMTOOLS_EXTRACT(DORADO_DUPLEX.out.duplex_ch.flatten())
 
     // filtering the reads to remove poor reads
-    NANOFILT_DUPLEX(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
+    NANOFILT(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
 
     // Doing an assembly with FLYE on all samples
     FLYE_DUPLEX(NANOFILT_DUPLEX.out.nfilt_ch.flatten())
