@@ -31,13 +31,19 @@ log.info """\
          .stripIndent()
     
     // Define workflows
-include { DUPLEX_ASM } from "${params.workflow_dir}/DUPLEX_ASM.nf"
+include { DUPLEX_ASM  } from "${params.workflow_dir}/DUPLEX_ASM.nf"
+include { SIMPLEX_ASM } from "${params.workflow_dir}/SIMPLEX_ASM.nf"
 
 
 // selecting the correct workflow based on user choice defined in main.config.
 
 workflow {
-if (params.type == "duplex_assembly") {
-	DUPLEX_ASM()
-	}
+        if (params.type == "duplex_assembly") {
+            DUPLEX_ASM()
+            }
+
+        if (params.type == "simplex_assembly") {
+            SIMPLEX_ASM()
+            }
+            
 }

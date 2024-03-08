@@ -10,7 +10,7 @@ if [ ! -d "$workdir" ]; then
     mkdir "$workdir"
     echo -e "\nFolder $workdir created successfully and will be used to store temporary files! \n"
 else
-    echo -e "\nStarting the nextflow run with folder $workdir to store temporary files.\n"
+    echo -e ""
 fi
 
 DATE=($(date "+%Y%m%d_%R"))
@@ -20,7 +20,7 @@ cp ${script_directory}/main.nf ${outdir}/config_files
 cp ${config} ${outdir}/config_files
 
 ## running the pipeline
-nextflow_23.04.4 run ${script_directory}/main.nf \
+nextflow_23.10.1 run ${script_directory}/main.nf \
 	-c ${config} \
 	--out_dir=${outdir} \
 	-work-dir ${workdir} \
@@ -32,5 +32,3 @@ nextflow_23.04.4 run ${script_directory}/main.nf \
 # nextflow run generate *html reports describing the pipeline. Move these to output folder
 mv *.html ${outdir}/nextflow_reports/
 mv *.png ${outdir}/nextflow_reports/
-
-echo -e "\n the job is finished \n"
