@@ -31,7 +31,7 @@ log.info """\
          .stripIndent()
     
     // Define workflows
-include { DUPLEX_ASM } from "./workflows/DUPLEX_ASM.nf"
+include { DUPLEX_ASM } from "${params.workflow_dir}/DUPLEX_ASM.nf"
 
 
 // selecting the correct workflow based on user choice defined in main.config.

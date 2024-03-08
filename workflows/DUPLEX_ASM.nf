@@ -1,18 +1,18 @@
 // modules for DUPLEX_ASM workflow
 	
-    include { DORADO_DEMUX } from "${params.module_dir}/DORADO.nf"
-    include { DORADO_DUPLEX } from "${params.module_dir}/DORADO.nf"
-    include { DORADO_SIMPLEX } from "${params.module_dir}/DORADO.nf"
-    include { NANOFILT } from "${params.module_dir}/NANOFILT.nf"
-  	include { NANOPLOT_SIMPLEX } from "${params.module_dir}/NANOPLOT.nf"
-    include { NANOPLOT_FASTQ } from "${params.module_dir}/NANOPLOT.nf"
-    include { PYCOQC_SIMPLEX } from "${params.module_dir}/PYCOQC.nf"
-    include { SAMTOOLS_EXTRACT } from "${params.module_dir}/SAMTOOLS.nf"
-    include { SAMTOOLS_READIDS } from "${params.module_dir}/SAMTOOLS.nf"
-    include { SEQKIT_STATS } from "${params.module_dir}/SEQKIT.nf"
-    include { SEQKIT_NFILT } from "${params.module_dir}/SEQKIT.nf"
-    include { SEQKIT_FLYE } from "${params.module_dir}/SEQKIT.nf"
-    include { FLYE_DUPLEX } from "${params.module_dir}/FLYE.nf"
+    include { DORADO_DEMUX } from "../modules/DORADO.nf"
+    include { DORADO_DUPLEX } from "../modules/DORADO.nf"
+    include { DORADO_SIMPLEX } from "../modules/DORADO.nf"
+    include { NANOFILT } from "../modules/NANOFILT.nf"
+  	include { NANOPLOT_SIMPLEX } from "../modules/NANOPLOT.nf"
+    include { NANOPLOT_FASTQ } from "../modules/NANOPLOT.nf"
+    include { PYCOQC_SIMPLEX } from "../modules/PYCOQC.nf"
+    include { SAMTOOLS_EXTRACT } from "../modules/SAMTOOLS.nf"
+    include { SAMTOOLS_READIDS } from "../modules/SAMTOOLS.nf"
+    include { SEQKIT_STATS } from "../modules/SEQKIT.nf"
+    include { SEQKIT_NFILT } from "../modules/SEQKIT.nf"
+    include { SEQKIT_FLYE } from "../modules/SEQKIT.nf"
+    include { FLYE_DUPLEX } from "../modules/FLYE.nf"
 
 
 // workflows
