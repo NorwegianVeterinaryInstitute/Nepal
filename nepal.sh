@@ -24,7 +24,7 @@ nextflow_23.04.4 run ${script_directory}/main.nf \
 	-c ${config} \
 	--out_dir=${outdir} \
 	-work-dir ${workdir} \
-	#-resume \
+	-resume \
 	-with-report $DATE.report.html \
 	-with-timeline $DATE.timeline.html \
 	-with-dag $DATE.flowchart.png
