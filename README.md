@@ -54,7 +54,7 @@ The current tools that are included in the pipeline are:
 
 4. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
     * `simplex_assembly` - A workflow that will use all reads produced from the Nanopore machine to do an assembly with Flye.
-    * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
+    * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 5 to 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
     * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice.
 
 5. Edit the file `main.config`, to indicate where the data, the sample sheet are located.

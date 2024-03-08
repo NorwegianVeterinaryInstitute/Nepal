@@ -39,8 +39,4 @@ workflow SIMPLEX_ASM {
     SEQKIT_NFILT(NANOFILT_SIMPLEX.out.nfilt_ch.collect())
     SEQKIT_FLYE(FLYE_ASM.out.assembly_ch.flatten())
     
-    
-	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
-	//NANOFILT_BASIC(QCAT.out.demultiplexed_ch.flatten())
-    //FLY_BASIC(NANOFILT_BASIC.out.trimmed_ch)
 }
