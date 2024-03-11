@@ -1,6 +1,6 @@
 // Settings for the analysis of fastq.gz files extracted by samtools with SEQKIT
 // This will generate a table that gives a small overview of the simplex and duplex reads for each sample
-process SEQKIT_STATS {
+process SEQKIT_DUPLEX {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
 
@@ -24,6 +24,31 @@ process SEQKIT_STATS {
 	cat duplex_stats.txt simplex_stats.txt > duplex_simplex_stats.txt
 
 	rm -r duplex_stats.txt simplex_stats.txt
+
+	"""
+
+
+}
+
+process SEQKIT_SIMPLEX {
+	executor="local"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/seqkit_2.7.0"
+
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
+
+	label 'medium'
+
+	input:
+	file(x)
+
+
+	output:
+	path "*.txt"
+
+	script:
+	"""
+	
+	seqkit stats -j 8 *.fastq.gz --all -T > simplex_stats.txt
 
 	"""
 

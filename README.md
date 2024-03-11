@@ -1,12 +1,12 @@
 # Nepal
 NExtflow Pipeline for Nanopore data anALysis
 
-## Disclaimer
-This pipeline is currently in development. Contact Thomas Haverkamp for more information.
-
-## License
-This software is published under the BSD 3-clause license. See the LICENSE file in the repository.
-___ 
+# Contents
+* [What is NEPAL](#what-is-nepal)
+* [Setting up your analysis](#setting-up-your-analysis)
+* [How to run this pipeline](#how-to-run-this-pipeline)
+* [Disclaimer](#disclaimer)
+* [License](#license)
 
 # What is Nepal?
 Nepal is a pipeline for processing raw nanopore data and can be used for sequence data for bacterial genomes, 16s rRNA or just generate a clean demultiplexed dataset that can be used in other projects. The pipeline is set-up for usage on a HPC cluster that uses slurm for task management. It requires the use of servers with GPUs (Nivdia A100) for the basecalling step. It can be run locally, if one or more GPUs are available. This pipeline takes as input a folder with pod5 files (https://pod5-file-format.readthedocs.io/en/latest/index.html), a samplesheet, the basecalling model you want to use, and the ID for the sequencing / barcoding kit you have you used.
@@ -46,6 +46,7 @@ The current tools that are included in the pipeline are:
         FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode05,sample05
         ...
 
+    **NOTE**: In case you only have sequenced one or a few samples with only that many barcodes from the barcoding kit, then it is possible to only write the lines for those barcodes. Dorado will not look for any other barcodes present in the dataset, and all the reads not matching the barcodes in the the sample_sheet.csv will be moved to the unclassified samples. In case you specify all 24 barcodes of a 24 barcode kit, dorado will then look for all those 24 barcodes and create the samples when it finds the barcodes.
 
 3. Now download this repository to your project folder with the command:
 
@@ -53,7 +54,7 @@ The current tools that are included in the pipeline are:
 
 4. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
     * `simplex_assembly` - A workflow that will use all reads produced from the Nanopore machine to do an assembly with Flye.
-    * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
+    * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 5 to 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
     * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice.
 
 5. Edit the file `main.config`, to indicate where the data, the sample sheet are located.
@@ -83,3 +84,9 @@ Inside the screen you can start the pipeline using the following command:
 
 That will create a folder with the results in your project folder, next to the folder of Nepal
 
+## Disclaimer
+This pipeline is currently in development. Contact Thomas Haverkamp for more information.
+
+## License
+This software is published under the BSD 3-clause license. See the LICENSE file in the repository.
+___ 

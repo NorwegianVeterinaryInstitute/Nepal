@@ -24,6 +24,38 @@ process SAMTOOLS_READIDS {
 
 }
 
+process SAMTOOLS_BAM2FQ {
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/samtools_1.19.2"
+	
+	publishDir "${params.out_dir}/simplex_reads/", pattern: "*.fastq.gz", mode: "copy"
+	
+	label 'medium'
+
+	input:
+	file(x)
+
+	output:
+	path "*.fastq.gz", emit: filter_ch
+
+	script:
+	samplename = x.toString() - ~/.bam$/
+	"""
+	
+	## making fastq datasets
+	samtools bam2fq ${samplename}.bam > ${samplename}.simplex.fastq
+
+	pigz -9 *.fastq
+
+	
+	"""
+
+}
+
+
+
+
+
+
 // the below process takes a bam file from dorado duplex,
 // it then extracts the duplex reads and simplex reads
 

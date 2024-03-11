@@ -3,7 +3,7 @@
 // Nanoplot settings for the raw data when using the basic pipeline
 // This will show all the reads that are coming from Guppy.
 process NANOPLOT_BASIC {
-	executor="local"
+
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
 	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
@@ -62,7 +62,7 @@ process NANOPLOT_CLEAN {
 
 	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
-	label 'tiny'
+	//label 'tiny'
 
 	input:
 	file(barcode*.gz)
@@ -85,12 +85,11 @@ process NANOPLOT_CLEAN {
 // Nanoplot settings for the analysis of bam files that are produced by Dorado.
 // This will show all the reads that are coming from dorado 
 process NANOPLOT_SIMPLEX {
-	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 
 	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
 
-	label 'tiny'
+	label 'medium'
 
 	input:
 	file(summary)
@@ -102,7 +101,7 @@ process NANOPLOT_SIMPLEX {
 	script:
 	"""
 
-	NanoPlot -t 4 --summary $summary --plots hex dot --title Sequencing_Summary -o Nanoplot-plots-log-transformed
+	NanoPlot -t 8 --summary $summary --plots hex dot --title Sequencing_Summary -o Nanoplot-plots-log-transformed
 
 
 	"""
@@ -113,6 +112,35 @@ process NANOPLOT_SIMPLEX {
 // Nanoplot settings for the analysis of bam files that are produced by Dorado.
 // This will show all the reads that are coming from dorado 
 process NANOPLOT_FASTQ {
+
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
+
+	publishDir "${params.out_dir}/data_overview/", pattern: "*", mode: "copy"
+
+	label 'medium'
+
+	input:
+	file(x)
+
+
+	output:
+	path "*.plots-log-transformed"
+
+	script:
+	samplename = x.toString() - ~/.simplex.fastq.gz$/
+	"""
+	
+	NanoPlot -t 8 --fastq *.simplex.fastq.gz  --plots hex dot --title ${samplename}.reads_all_samples -o Nanoplot.${samplename}.plots-log-transformed
+
+	"""
+
+
+}
+
+
+// Nanoplot settings for the analysis of bam files that are produced by Dorado.
+// This will show all the reads that are coming from dorado 
+process NANOPLOT_DUPLEX {
 	executor="local"
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/nanoplot_1.40.2"
 

@@ -24,11 +24,11 @@ process FLY_BASIC {
 	script:
 	"""
 	ls -la
-  flye --nano-raw *.trimmed.fastq.gz --out-dir ${samplename} --threads 20
+    flye --nano-raw *.nfilt.fastq.gz --out-dir ${samplename} --threads 20
 	"""
 }
 
-process FLYE_DUPLEX {
+process FLYE_ASM {
 	/* this process takes the output of NanoFilt and runs the Flye assembler.
 	* The demultiplexed genomes are assembled with default Flye settings.
 	* in the workflow this is indicated with the flatten operator.
@@ -54,7 +54,7 @@ process FLYE_DUPLEX {
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
 	"""
 	ls -la
-  flye --nano-raw *.fastq.gz --out-dir ${samplename} --threads 20
+  	flye --nano-raw *.fastq.gz --out-dir ${samplename} --threads 20
 
     ln -s ${samplename}/assembly.fasta ./${samplename}.flye.asm.fasta
 
