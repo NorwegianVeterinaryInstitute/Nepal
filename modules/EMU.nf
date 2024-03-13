@@ -16,7 +16,7 @@ process EMU_CLASS {
 
 	output:
 	tuple val(samplename), path {"*"}
-	path {"*.flye.asm.fasta"}, emit: assembly_ch
+	path {"*.tsv"}, emit: classify_ch
 
 	script:
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
@@ -31,6 +31,8 @@ process EMU_CLASS {
         --output-unclassified \
         --threads 20 \
         *.fastq.gz
+
+	ln -s ${samplename}.emu/${samplename}.clean_rel-abundance.tsv ./
 
 	"""
 }
@@ -58,7 +60,6 @@ process EMU_COMBINE {
 
 	output:
 	tuple val(samplename), path {"*"}
-	path {"*.flye.asm.fasta"}, emit: assembly_ch
 
 	script:
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
