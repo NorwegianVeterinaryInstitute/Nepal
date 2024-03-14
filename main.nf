@@ -33,6 +33,7 @@ log.info """\
     // Define workflows
 include { DUPLEX_ASM  } from "${params.workflow_dir}/DUPLEX_ASM.nf"
 include { SIMPLEX_ASM } from "${params.workflow_dir}/SIMPLEX_ASM.nf"
+include { AMPLICON } from "${params.workflow_dir}/AMPLICON.nf"
 
 
 // selecting the correct workflow based on user choice defined in main.config.
@@ -44,6 +45,10 @@ workflow {
 
         if (params.type == "simplex_assembly") {
             SIMPLEX_ASM()
+            }
+        
+        if (params.type == "amplicon") {
+            AMPLICON()
             }
             
 }

@@ -48,9 +48,14 @@ The current tools that are included in the pipeline are:
 
     **NOTE**: In case you only have sequenced one or a few samples with only that many barcodes from the barcoding kit, then it is possible to only write the lines for those barcodes. Dorado will not look for any other barcodes present in the dataset, and all the reads not matching the barcodes in the the sample_sheet.csv will be moved to the unclassified samples. In case you specify all 24 barcodes of a 24 barcode kit, dorado will then look for all those 24 barcodes and create the samples when it finds the barcodes.
 
-3. Now download this repository to your project folder with the command:
+3. Now it is time to set-up the NEPAL pipeline. You can do that in two ways.
+    1. On the Saga cluster, while standing in your project folder, copy the nepal directory: 
 
-        git clone https://github.com/NorwegianVeterinaryInstitute/Nepal.git 
+            rsync -rauWP /cluster/projects/nn9305k/vi_src/Nepal ./
+
+    2. Or download the repository to your project folder with the command:
+
+            git clone https://github.com/NorwegianVeterinaryInstitute/Nepal.git 
 
 4. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
     * `simplex_assembly` - A workflow that will use all reads produced from the Nanopore machine to do an assembly with Flye.
