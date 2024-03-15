@@ -1,10 +1,13 @@
 # Nepal
-NExtflow Pipeline for Nanopore data anALysis
+NExtflow Pipeline for Nanopore data anALysis 
+
+[![DOI](https://zenodo.org/badge/296637297.svg)](https://zenodo.org/doi/10.5281/zenodo.10821960)
 
 # Contents
 * [What is NEPAL](#what-is-nepal)
 * [Setting up your analysis](#setting-up-your-analysis)
 * [How to run this pipeline](#how-to-run-this-pipeline)
+* [Citation of Nepal](#citation-of-Nepal)
 * [Disclaimer](#disclaimer)
 * [License](#license)
 
@@ -88,6 +91,9 @@ Inside the screen you can start the pipeline using the following command:
         ./nepal.sh main.config ../YOUR_OUTPUT_DIRECTORY
 
 That will create a folder with the results in your project folder, next to the folder of Nepal
+
+## Citation of Nepal
+When you use this pipeline for your analysis and publication, then I would be happy if you cite the tool. You can do that by citing the DOI: `10.5281/zenodo.10821961`
 
 ## Disclaimer
 This pipeline is currently in development. Contact Thomas Haverkamp for more information.
