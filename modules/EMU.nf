@@ -32,7 +32,7 @@ process EMU_CLASS {
         --threads 20 \
         *.fastq.gz
 
-	ln -s ${samplename}.emu/${samplename}.clean_rel-abundance.tsv ./
+	ln -s ${samplename}.emu/${samplename}.nfilt.fastq_rel-abundance.tsv ./${samplename}.rel-abundance.tsv
 
 	"""
 }
@@ -64,11 +64,8 @@ process EMU_COMBINE {
 	script:
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
 	"""
-	ls -la
-  	for taxon in species genus family order class phylum clade superkingdom; do
-		 echo running $taxon
-		 emu combine-outputs combined_output $taxon
-	done
+	ls
+  	for taxon in species genus family order class phylum superkingdom; do echo running \$taxon ; emu combine-outputs ./ \$taxon ; done
 
 	"""
 }
