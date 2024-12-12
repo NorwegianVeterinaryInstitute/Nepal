@@ -76,6 +76,7 @@ I store the sequence data on $USERWORK (Be sure you that this is a copy of the o
     * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 5 to 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
     * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice.
 
+
 6. Edit the file `main.config`, to indicate where the data and the sample sheet are located.
 7. Edit the file `main.config`, to indicate which sequencing / barcoding kit you have used, and what basecalling model you want to use. If you are unsure which model to pick, I suggest you pick the one that has "SUP" in the name, because that will give you the most accurate basecalls and the best data. If you are in a hurry, than use FAST, but you will lose more data that way.
 8. Edit in the file `main.config`, the settings for Nanofilt, if you want to use different cut-off for the minimum quality or length. For Amplicons you also need to set the maximum length correctly. For full lenght 16s rRNA sequences you could use: minlenght = "1450" & maxlength = "1600". But do check that is is not discarding too many of your reads.

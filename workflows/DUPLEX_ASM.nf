@@ -5,6 +5,7 @@
     include { DORADO_SIMPLEX } from "../modules/DORADO.nf"
     include { NANOFILT_DUPLEX } from "../modules/NANOFILT.nf"
   	include { NANOPLOT_SIMPLEX } from "../modules/NANOPLOT.nf"
+	include { NANOPLOT_DUPLEX } from "../modules/NANOPLOT.nf"
     include { NANOPLOT_FASTQ } from "../modules/NANOPLOT.nf"
     include { PYCOQC_SIMPLEX } from "../modules/PYCOQC.nf"
     include { SAMTOOLS_EXTRACT } from "../modules/SAMTOOLS.nf"
@@ -30,17 +31,17 @@ workflow DUPLEX_ASM {
     SAMTOOLS_EXTRACT(DORADO_DUPLEX.out.duplex_ch.flatten())
 
     // filtering the reads to remove poor reads
-    NANOFILT(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
+    NANOFILT_DUPLEX(SAMTOOLS_EXTRACT.out.filter_ch.flatten())
 
     // Doing an assembly with FLYE on all samples
-    FLYE_ASM(NANOFILT.out.nfilt_ch.flatten())
+    FLYE_ASM(NANOFILT_DUPLEX.out.nfilt_ch.flatten())
 
     // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     PYCOQC_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
     NANOPLOT_DUPLEX(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_DUPLEX(SAMTOOLS_EXTRACT.out.extract_ch.collect())
-    SEQKIT_NFILT(NANOFILT.out.nfilt_ch.collect())
+    SEQKIT_NFILT(NANOFILT_DUPLEX.out.nfilt_ch.collect())
     SEQKIT_FLYE(FLYE_ASM.out.assembly_ch.flatten())
     
     
