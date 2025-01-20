@@ -17,6 +17,7 @@ DATE=($(date "+%Y%m%d_%R"))
 mkdir -p ${outdir}/config_files
 mkdir -p ${outdir}/nextflow_reports
 cp ${script_directory}/main.nf ${outdir}/config_files
+cp ${script_directory}/nextflow.config ${outdir}/config_files
 cp ${config} ${outdir}/config_files
 
 ## running the pipeline
