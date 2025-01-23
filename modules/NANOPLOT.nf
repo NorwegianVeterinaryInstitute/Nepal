@@ -101,7 +101,7 @@ process NANOPLOT_SIMPLEX {
 	script:
 	"""
 
-	NanoPlot -t 8 --summary $summary --plots hex dot --title Sequencing_Summary -o Nanoplot-plots-log-transformed
+	NanoPlot -t 8 --summary $summary --plots hex dot --title Sequencing_Summary -o Nplot_simplex_reads
 
 
 	"""
@@ -130,7 +130,7 @@ process NANOPLOT_FASTQ {
 	samplename = x.toString() - ~/.simplex.fastq.gz$/
 	"""
 	
-	NanoPlot -t 8 --fastq *.simplex.fastq.gz  --plots hex dot --title ${samplename}.reads_all_samples -o Nanoplot.${samplename}.plots-log-transformed
+	NanoPlot -t 8 --fastq *.simplex.fastq.gz  --plots hex dot --title ${samplename}.reads_all_samples -o Nplot.${samplename}
 
 	"""
 
@@ -158,9 +158,9 @@ process NANOPLOT_DUPLEX {
 	script:
 	"""
 	
-	NanoPlot -t 8 --fastq *.duplex.fastq.gz  --plots hex dot --title Duplex_reads_all_samples -o Nanoplot-duplex_plots-log-transformed
+	NanoPlot -t 8 --fastq *.duplex.fastq.gz  --plots hex dot --title Duplex_reads_all_samples -o Nplot-duplex_reads
 	
-	NanoPlot -t 8 --fastq *.simplex.fastq.gz  --plots hex dot --title simplex_reads_all_samples -o Nanoplot-simplex_plots-log-transformed
+	NanoPlot -t 8 --fastq *.simplex.fastq.gz  --plots hex dot --title simplex_reads_all_samples -o Nplot-simplex_reads
 
 	"""
 
