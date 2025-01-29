@@ -37,6 +37,6 @@ workflow SIMPLEX_ASM {
     NANOPLOT_FASTQ(SAMTOOLS_BAM2FQ.out.filter_ch.flatten())
     SEQKIT_SIMPLEX(SAMTOOLS_BAM2FQ.out.filter_ch.flatten())
     SEQKIT_NFILT(NANOFILT_SIMPLEX.out.nfilt_ch.collect())
-    SEQKIT_FLYE(FLYE_ASM.out.assembly_ch.flatten())
+    SEQKIT_FLYE(FLYE_ASM.out.assembly_ch.collect())
     
 }
