@@ -5,7 +5,7 @@
 process DORADO_SIMPLEX {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_0.4.2"
 	
-	publishDir "${params.out_dir}/dorado_simplex/", pattern: "*", mode: "copy"
+	//publishDir "${params.out_dir}/dorado_simplex/", pattern: "*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	//publishDir "${params.out_dir}/01_dorado_simplex/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
@@ -35,7 +35,7 @@ process DORADO_SIMPLEX {
 process DORADO_DEMUX {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_0.4.2"
 	
-	publishDir "${params.out_dir}/dorado_demux/", pattern: "demultiplexed/*", mode: "copy"
+	//publishDir "${params.out_dir}/dorado_demux/", pattern: "demultiplexed/*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	//publishDir "${params.out_dir}/01_dorado_simplex/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
@@ -63,7 +63,7 @@ process DORADO_DEMUX {
 process DORADO_DUPLEX {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_0.4.2"
 	
-	publishDir "${params.out_dir}/dorado_duplex/", pattern: "*", mode: "copy"
+	//publishDir "${params.out_dir}/dorado_duplex/", pattern: "*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	//publishDir "${params.out_dir}/01_dorado_simplex/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
 
