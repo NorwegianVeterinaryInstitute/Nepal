@@ -42,7 +42,7 @@ workflow DUPLEX_ASM {
     NANOPLOT_DUPLEX(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_DUPLEX(SAMTOOLS_EXTRACT.out.extract_ch.collect())
     SEQKIT_NFILT(NANOFILT_DUPLEX.out.nfilt_ch.collect())
-    SEQKIT_FLYE(FLYE_ASM.out.assembly_ch.flatten())
+    SEQKIT_FLYE(FLYE_ASM.out.assembly_ch.collect())
     
     
 	//DUPLEX_SPLIT(GUPPY_BASIC.out.fastq_ch.flatten())
