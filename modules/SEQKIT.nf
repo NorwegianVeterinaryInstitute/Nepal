@@ -98,7 +98,7 @@ process SEQKIT_FLYE {
 	script:
 	samplename = x.toString() - ~/.flye.asm.fasta$/
 	"""
-	seqkit stats -j 8 *.flye.asm.fasta --all -T > ${samplename}.asm_stats.txt
+	seqkit stats -j 8 *.flye.asm.fasta --all -T > flye_asm_stats.txt
 
 	"""
 
