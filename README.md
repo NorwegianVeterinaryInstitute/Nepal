@@ -96,7 +96,9 @@ You can always go back to the screen with
 
         screen -r NEPAL
 
-Make sure that you have set-up your conda system, because this pipeline will use the local conda environments on our cluster. Hint: type `miniconda` inside the screen.
+Now make sure that you have set-up your conda system, because this pipeline will use the local conda environments on our cluster. 
+
+      Hint: type `miniconda` inside the screen.
 
 Inside the screen you can start the pipeline using the following command:
     
