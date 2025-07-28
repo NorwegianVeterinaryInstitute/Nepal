@@ -96,7 +96,7 @@ process NANOPLOT_SIMPLEX {
 
 
 	output:
-	path "*-plots-log-transformed"
+	path "*_simplex_reads"
 
 	script:
 	"""
@@ -124,7 +124,7 @@ process NANOPLOT_FASTQ {
 
 
 	output:
-	path "*.plots-log-transformed"
+	path "Nplot.*"
 
 	script:
 	samplename = x.toString() - ~/.simplex.fastq.gz$/
@@ -153,7 +153,7 @@ process NANOPLOT_DUPLEX {
 
 
 	output:
-	path "*_plots-log-transformed"
+	path "Nplot-*"
 
 	script:
 	"""
