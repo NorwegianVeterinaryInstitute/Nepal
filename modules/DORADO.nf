@@ -85,7 +85,7 @@ process DORADO_DUPLEX {
 
 	echo \$SAMPLENAME
 
-	dorado duplex -t 32 $params.dorado.moddir/$params.dorado.model --read-ids \$SAMPLENAME.read_ids.txt pod5 > \$SAMPLENAME.bam
+	dorado duplex -x "cuda:all" --min-qscore 7 -t 32 $params.dorado.moddir/$params.dorado.model --read-ids \$SAMPLENAME.read_ids.txt pod5 > \$SAMPLENAME.bam
 
 	"""
 
