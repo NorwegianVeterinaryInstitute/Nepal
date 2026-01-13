@@ -31,6 +31,7 @@ process DORADO_SIMPLEX {
 
 // This process does demultiplexing with dorado demux.
 // It takes a samplesheet and the information for the kit that was used.
+// it also does trimming of the barcode. 
 
 process DORADO_DEMUX {
 	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_1.3.0"
