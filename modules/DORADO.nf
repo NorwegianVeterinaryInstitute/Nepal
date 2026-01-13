@@ -38,18 +38,20 @@ process DORADO_DEMUX {
 	//publishDir "${params.out_dir}/dorado_demux/", pattern: "demultiplexed/*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	//publishDir "${params.out_dir}/01_dorado_simplex/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", pattern: "demultiplexed/barcoding_summary.txt", mode: "copy"
 
-	label 'gpu_A100'
+	label 'heavy'
 
 	input:
 	file(x)
 
 	output:
-	path "demultiplexed/*", emit: demux_ch
+	// Captures every BAM in the nested structure
+	path "demultiplexed/**/*.bam", emit: demux_ch
 
 	script:
 	"""
-	dorado demux --kit-name $params.dorado.barcode --sample-sheet $params.samplesheet.location --output-dir demultiplexed $x
+    dorado demux --kit-name $params.dorado.barcode --sample-sheet $params.samplesheet.location --emit-summary --output-dir demultiplexed $x
 
 	"""
 
