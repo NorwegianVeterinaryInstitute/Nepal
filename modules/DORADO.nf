@@ -92,3 +92,27 @@ process DORADO_DUPLEX {
 	"""
 
 }
+
+
+// the bellow process is to rename the bam files after the demuxing step.
+// by doing this we get bam files with the same sample name as the alias in the samplesheet.
+
+process MERGE_BAMS {
+    tag "$alias"
+
+    input:
+    tuple val(alias), path(chunks)
+
+    output:
+    path "${alias}.bam", emit: merged_bam
+
+    script:
+    if (chunks instanceof List && chunks.size() > 1)
+        """
+        samtools merge ${alias}.bam $chunks
+        """
+    else
+        """
+        mv $chunks ${alias}.bam
+        """
+}
