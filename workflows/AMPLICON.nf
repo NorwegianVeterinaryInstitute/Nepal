@@ -42,7 +42,7 @@ workflow AMPLICON {
     SAMTOOLS_BAM2FQ(MERGE_BAMS.out.merged_bam)
 
     // filtering the reads to remove poor reads
-    NANOFILT_SIMPLEX(MERGE_BAMS.out.filter_ch.flatten())
+    NANOFILT_SIMPLEX(SAMTOOLS_BAM2FQ.out.filter_ch.flatten())
 
     // Doing the classification with emu abundance
     EMU_CLASS(NANOFILT_SIMPLEX.out.nfilt_ch.flatten())
