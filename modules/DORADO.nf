@@ -39,7 +39,7 @@ process DORADO_DEMUX {
 	//publishDir "${params.out_dir}/dorado_demux/", pattern: "demultiplexed/*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
 	//publishDir "${params.out_dir}/01_dorado_simplex/", pattern: "sequencing_logs/sequencing_*.*", mode: "copy"
-	publishDir "${params.out_dir}/data_overview/", pattern: "demultiplexed/barcoding_summary.txt", mode: "copy"
+	publishDir "${params.out_dir}/data_overview/", mode: 'copy', pattern: 'demultiplexed/*.txt', saveAs: { path -> new File(path).getName() }
 
 	label 'heavy'
 
@@ -49,6 +49,7 @@ process DORADO_DEMUX {
 	output:
 	// Captures every BAM in the nested structure
 	path "demultiplexed/**/*.bam", emit: demux_ch
+    path 'demultiplexed/*.txt'
 
 	script:
 	"""
