@@ -69,18 +69,19 @@ I store the sequence data on $USERWORK (Be sure you that this is a copy of the o
         FLO-MIN114,SQK-RBK114.24,Experiment_test,barcode05,sample05
         ...
 
-    **NOTE**: In case you only have sequenced one or a few samples with only that many barcodes from the barcoding kit, then it is possible to only write the lines for those barcodes. Dorado will not look for any other barcodes present in the dataset, and all the reads not matching the barcodes in the the sample_sheet.csv will be moved to the unclassified samples. In case you specify all 24 barcodes of a 24 barcode kit, dorado will then look for all those 24 barcodes and create the samples when it finds the barcodes.
+    **NOTE**: In case you only have sequenced one or a few samples with only that many barcodes from the barcoding kit, then it is possible to only write the lines for those barcodes. Dorado will not look for any other barcodes present in the dataset, and all the reads not matching the barcodes in the the sample_sheet.csv will be moved to the unclassified samples. In case you specify all 24 barcodes of a 24 barcode kit, dorado will then look for all those 24 barcodes and create the samples when it finds the barcodes.   
+   **NOTE 2**: For the column `experiment_id` use ONLY one id in that column. If there is a a second id, the demultiplexing will fail.
  
-5. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
+6. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
     * `simplex_assembly` - A workflow that will use all reads produced from the Nanopore machine to do an assembly with Flye.
     * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 5 to 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
     * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice.
 
 
-6. Edit the file `main.config`, to indicate where the data and the sample sheet are located.
-7. Edit the file `main.config`, to indicate which sequencing / barcoding kit you have used, and what basecalling model you want to use. If you are unsure which model to pick, I suggest you pick the one that has "SUP" in the name, because that will give you the most accurate basecalls and the best data. If you are in a hurry, than use FAST, but you will lose more data that way.
-8. Edit in the file `main.config`, the settings for Nanofilt, if you want to use different cut-off for the minimum quality or length. For Amplicons you also need to set the maximum length correctly. For full lenght 16s rRNA sequences you could use: minlenght = "1450" & maxlength = "1600". But do check that is is not discarding too many of your reads.
-9. A final note. All the temporary files of the pipeline will be stored in your folder:
+7. Edit the file `main.config`, to indicate where the data and the sample sheet are located.
+8. Edit the file `main.config`, to indicate which sequencing / barcoding kit you have used, and what basecalling model you want to use. If you are unsure which model to pick, I suggest you pick the one that has "SUP" in the name, because that will give you the most accurate basecalls and the best data. If you are in a hurry, than use FAST, but you will lose more data that way.
+9. Edit in the file `main.config`, the settings for Nanofilt, if you want to use different cut-off for the minimum quality or length. For Amplicons you also need to set the maximum length correctly. For full lenght 16s rRNA sequences you could use: minlenght = "1450" & maxlength = "1600". But do check that is is not discarding too many of your reads.
+10. A final note. All the temporary files of the pipeline will be stored in your folder:
 
         $USERWORK/nepal
     The pipeline will create it, if it is not present.
