@@ -100,6 +100,7 @@ process DORADO_DUPLEX {
 // by doing this we get bam files with the same sample name as the alias in the samplesheet.
 
 process MERGE_BAMS {
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/samtools_1.19.2"
     tag "$alias"
 
     input:
