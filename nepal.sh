@@ -21,7 +21,7 @@ cp ${script_directory}/nextflow.config ${outdir}/config_files
 cp ${config} ${outdir}/config_files
 
 ## running the pipeline
-nextflow_23.10.1 run ${script_directory}/main.nf \
+nextflow_25.04.7 run ${script_directory}/main.nf \
 	-c ${config} \
 	--out_dir=${outdir} \
 	-work-dir ${workdir} \
