@@ -3,7 +3,7 @@
 
 
 process DORADO_SIMPLEX {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_1.3.0"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_2.1.0"
 	
 	//publishDir "${params.out_dir}/dorado_simplex/", pattern: "*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
@@ -34,7 +34,7 @@ process DORADO_SIMPLEX {
 // it also does trimming of the barcode. 
 
 process DORADO_DEMUX {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_1.3.0"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_2.1.0"
 	
 	//publishDir "${params.out_dir}/dorado_demux/", pattern: "demultiplexed/*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"
@@ -65,7 +65,7 @@ process DORADO_DEMUX {
 // It only takes the bam file as input
 
 process DORADO_DUPLEX {
-	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_1.3.0"
+	conda "/cluster/projects/nn9305k/src/miniconda/envs/dorado_gpu_2.1.0"
 	
 	//publishDir "${params.out_dir}/dorado_duplex/", pattern: "*", mode: "copy"
 	//publishDir "${params.out_dir}/01_guppy/", pattern: "fastq", mode: "copy"

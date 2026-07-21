@@ -75,7 +75,7 @@ I store the sequence data on $USERWORK (Be sure you that this is a copy of the o
 6. Edit the file `main.config`,which is in the Nepal folder you just downloaded to indicate what workflow to use.
     * `simplex_assembly` - A workflow that will use all reads produced from the Nanopore machine to do an assembly with Flye.
     * `duplex_assembly` - A workflow that will try to combine forward and reverse strands into duplex reads. Note that about 5 to 10 % of your reads will be merged here. Duplex reads have in general higher qualitys than both simplex parent reads. The remaining single stranded reads will be combined with the duplex reads and together are used for assembly with Flye.
-    * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice.
+    * `amplicons`  A workflow that will use all reads produced from the Nanopore machine to do filter out the amplicon reads, and then run EMU classification against the database of your choice. (_Emu classification can be turned off in the file main.config_)
 
 
 7. Edit the file `main.config`, to indicate where the data and the sample sheet are located.   
@@ -107,6 +107,10 @@ Inside the screen you can start the pipeline using the following command:
         ./nepal.sh main.config ../YOUR_OUTPUT_DIRECTORY
 
 That will create a folder with the results in your project folder, next to the folder of Nepal
+
+### switch off emu classification.
+Classification with the EMU tool can take quite a bit of time, and of you are not interested in those results it is sad to wait for the pipeline to finish.
+You can now modify `main.config` file parameter: `params.run_emu` and set it to `false`. 
 
 ## Citation of Nepal
 When you use this pipeline for your analysis and publication, then I would be happy if you cite the tool. You can do that by citing the DOI: `10.5281/zenodo.10821961`
