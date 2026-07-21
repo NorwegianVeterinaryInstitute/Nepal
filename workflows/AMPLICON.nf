@@ -44,9 +44,13 @@ workflow AMPLICON {
     // filtering the reads to remove poor reads
     NANOFILT_SIMPLEX(SAMTOOLS_BAM2FQ.out.filter_ch.flatten())
 
-    // Doing the classification with emu abundance
-    EMU_CLASS(NANOFILT_SIMPLEX.out.nfilt_ch.flatten())
-    EMU_COMBINE(EMU_CLASS.out.classify_ch.collect())
+    // Doing the classification with emu abundance -- optional, controlled by params.run_emu
+    if (params.run_emu) {
+        EMU_CLASS(NANOFILT_SIMPLEX.out.nfilt_ch.flatten())
+        EMU_COMBINE(EMU_CLASS.out.classify_ch.collect())
+    } else {
+        log.info "params.run_emu = false -> skipping EMU_CLASS and EMU_COMBINE"
+    }
 
     // Generating the stats of the sequence data
 	NANOPLOT_SIMPLEX(DORADO_SIMPLEX.out.summary_ch.collect())
