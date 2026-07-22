@@ -1,7 +1,7 @@
 # Nepal
 NExtflow Pipeline for Nanopore data anALysis 
 
-[![DOI](https://zenodo.org/badge/296637297.svg)](https://zenodo.org/doi/10.5281/zenodo.10821960)
+[![DOI](https://zenodo.org/badge/296637297.svg)](https://zenodo.org/doi/10.5281/zenodo.21487258)
 
 # Contents
 * [What is NEPAL](#what-is-nepal)
