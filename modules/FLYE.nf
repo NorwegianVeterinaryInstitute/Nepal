@@ -24,7 +24,7 @@ process FLY_BASIC {
 	script:
 	"""
 	ls -la
-    flye --nano-raw *.nfilt.fastq.gz --out-dir ${samplename} --threads 20
+    flye --nano-hq *.nfilt.fastq.gz --out-dir ${samplename} --threads 20
 	"""
 }
 
@@ -54,7 +54,7 @@ process FLYE_ASM {
 	samplename = x.toString() - ~/.nfilt.fastq.gz$/
 	"""
 	ls -la
-  	flye --nano-raw *.fastq.gz --out-dir ${samplename} --threads 20
+  	flye --nano-hq *.fastq.gz --out-dir ${samplename} --threads 20
 
     ln -s ${samplename}/assembly.fasta ./${samplename}.flye.asm.fasta
 
